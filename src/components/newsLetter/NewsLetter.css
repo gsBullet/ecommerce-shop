@@ -10,6 +10,7 @@
   margin-bottom: 150px;
   background: linear-gradient(180deg, #fde1ff 0%, #e1ffea22 60%);
   gap: 30px;
+  border: 1px solid #ecececec;
 }
 
 .newsletter h1 {
@@ -29,7 +30,7 @@
   width: 730px;
   height: 70px;
   border-radius: 80px;
-  border: 1px solid #ececec;
+  border: 1px solid #ecececec;
 }
 .newsletter input {
   border: none;
