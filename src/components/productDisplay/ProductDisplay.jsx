@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./productDisplay.css";
 import star_icon from "../assets/Frontend_Assets/star_icon.png";
 import star_dull_icon from "../assets/Frontend_Assets/star_dull_icon.png";
+import { ShopContext } from "../../context/ShopContest";
 
 const ProductDisplay = (props) => {
-    console.log(props);
+    const {addToCart} = useContext(ShopContext)
+
     
   const { product } = props;
   return (
@@ -53,7 +55,7 @@ const ProductDisplay = (props) => {
             <div>xxl</div>
           </div>
         </div>
-        <button>add to cart</button>
+        <button onClick={()=>addToCart(product.id)}>add to cart</button>
         <div className="product-display-right-category-items">
           <p className="product-category-right-category">
             <span> Tategory:</span> Women, T-shirt, Crop Top

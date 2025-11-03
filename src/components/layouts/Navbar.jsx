@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import logo from "../assets/Frontend_Assets/logo.png";
 import cartIcon from "../assets/Frontend_Assets/cart_icon.png";
 import { Link, NavLink } from "react-router-dom";
+import { ShopContext } from "../../context/ShopContest";
 const Navbar = () => {
   const [menu, setMenu] = React.useState();
-  console.log(menu);
+  const {getTotatCartItems} = useContext(ShopContext)
+ 
 
   return (
     <div className="py-5 border-b">
@@ -59,12 +61,12 @@ const Navbar = () => {
             </Link>
 
             {/* Cart Icon with Badge */}
-            <div className="relative cursor-pointer">
+            <Link to="/cart"  className="relative cursor-pointer">
               <img src={cartIcon} alt="Cart" className="w-6 h-6 text-red-600" />
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                0
+               {getTotatCartItems()}
               </span>
-            </div>
+            </Link>
           </div>
         </div>
       </div>

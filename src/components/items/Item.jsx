@@ -2,7 +2,6 @@ import React from "react";
 import "./item.css";
 import { Link } from "react-router-dom";
 const Item = (props) => {
-  console.log(props);
   
   return (
     <div className="item">
