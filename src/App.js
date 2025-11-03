@@ -14,21 +14,36 @@ import ShopCategory from "./pages/ShopCategory";
 import menBanner from "./components/assets/Frontend_Assets/banner_mens.png";
 import womenBanner from "./components/assets/Frontend_Assets/banner_women.png";
 import kidsBanner from "./components/assets/Frontend_Assets/banner_kids.png";
+import Product from "./pages/Product";
+import Cart from "./pages/Cart";
 
 const App = () => {
   return (
     <HashRouter>
-      <Routes>
-        <Route path="/" element={<FrontEndLayout />}>
-          <Route index element={<Shop />} />
-          {/* <Route path="/shop" element={<ShopCategory category="all" />} /> */}
-          <Route path="/men" element={<ShopCategory banner={menBanner} category="men" />} />
-          <Route path="/women" element={<ShopCategory banner={womenBanner} category="women" />} />
-          <Route path="/kids" element={<ShopCategory banner={kidsBanner} category="kids" />} />
-          <Route path="/log-in" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-      </Routes>
+        <Routes>
+          <Route path="/" element={<FrontEndLayout />}>
+            <Route index element={<Shop />} />
+            {/* <Route path="/shop" element={<ShopCategory category="all" />} /> */}
+            <Route
+              path="/men"
+              element={<ShopCategory banner={menBanner} category="men" />}
+            />
+            <Route
+              path="/women"
+              element={<ShopCategory banner={womenBanner} category="women" />}
+            />
+            <Route
+              path="/kids"
+              element={<ShopCategory banner={kidsBanner} category="kid" />}
+            />
+            <Route path="/product" element={<Product />}>
+              <Route path=":productId" element={<Product />} />
+            </Route>
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/log-in" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+        </Routes>
     </HashRouter>
   );
 };

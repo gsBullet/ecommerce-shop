@@ -2,6 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+h1 {
+  font-size: 2.5rem;      /* controls text size */
+  font-weight: 700;       /* boldness (100–900) */
+  color: #111827;         /* text color */
+  font-family: "Poppins", sans-serif; /* font type */
+  text-transform: capitalize; /* uppercase | lowercase | capitalize */
+  letter-spacing: 0.5px;  /* spacing between letters */
+  word-spacing: 1px;      /* spacing between words */
+  line-height: 1.2;       /* space between lines */
+  text-align: start;     /* left | right | center | justify */
+   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); /* shadow behind text */
+}
+h2 {
+  font-size: 2rem;            /* Adjust size (default ~1.5–2rem) */
+  font-weight: 600;           /* 100–900 scale */
+  color: #1f2937;             /* text color */
+  font-family: "Poppins", sans-serif; /* or "Roboto", "Playfair Display", etc. */
+  text-transform: capitalize; /* uppercase | lowercase | capitalize */
+  letter-spacing: 0.3px;      /* space between letters */
+  line-height: 1.3;           /* vertical spacing between lines */
+  text-align: left;           /* left | right | center | justify */
+  margin: 1rem 0;             /* top/bottom spacing */
+}
+
+
+/* h1 {
+  transition: all 0.3s ease;
+}
+
+h1:hover {
+  color: #2563eb; 
+  transform: scale(1.05); 
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.15);
+} */
+
+/* h1 {
+  background: linear-gradient(90deg, #06b6d4, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+} */
+
+img{
+  display: inline;
+}
 .hero {
   height: 100vh;
   background: linear-gradient(180deg, #fde1ff, #e1ffea22 60%);
