@@ -1,6 +1,7 @@
 import React from "react";
-import handIcon from "./assets/Frontend_Assets/hand_icon.png";
-import arrowIcon from "./assets/Frontend_Assets/arrow.png";
+import handIcon from "../assets/Frontend_Assets/hand_icon.png";
+import arrowIcon from "../assets/Frontend_Assets/arrow.png";
+import "./hero.css";
 
 const Hero = () => {
   return (
@@ -12,11 +13,11 @@ const Hero = () => {
             new arrivals only
           </h2>
           <div>
-            <div className="hero-hand-icon flex items-center gap-5">
+            <div className="hero-left-icon flex items-center gap-5">
               <p className="text-[#171717] text-7xl font-bold">
                 new
               </p>
-              <img src={handIcon} alt="Hand Icon" className="w-24 h-24" />
+              <img src={handIcon} alt="Hand Icon" className="w-24 h-24 " />
             </div>
             <p className="text-[#171717] text-7xl font-bold">collections</p>
             <p className="text-[#171717] text-7xl font-bold">for everyone</p>

@@ -111,3 +111,7 @@
   font-weight: 600;
   cursor: pointer;
 }
+.cartitems-total-item h3{
+    /* border-bottom: 1px solid #e2e2e2; */
+    font-weight: 600;
+}
