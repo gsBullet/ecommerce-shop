@@ -56,7 +56,7 @@
 }
 @media (max-width: 800px) {
    .new-collections{
-    height: 75vh;
+    height: 70vh;
   }
   .new-collections {
     gap: 6px;
