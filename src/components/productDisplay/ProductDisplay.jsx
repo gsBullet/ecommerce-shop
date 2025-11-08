@@ -5,13 +5,12 @@ import star_dull_icon from "../assets/Frontend_Assets/star_dull_icon.png";
 import { ShopContext } from "../../context/ShopContest";
 
 const ProductDisplay = (props) => {
-    const {addToCart} = useContext(ShopContext)
+  const { addToCart } = useContext(ShopContext);
 
-    
   const { product } = props;
   return (
-    <div className="product-display ">
-      <div className="product-display-left">
+    <div className="product-display">
+      <div className="product-display-left ">
         <div className="product-display-img-list">
           <img src={product.image} alt="" />
           <img src={product.image} alt="" />
@@ -27,7 +26,7 @@ const ProductDisplay = (props) => {
         </div>
       </div>
       <div className="product-display-right">
-        <h2>{product.name}</h2>
+        <h1>{product.name}</h1>
         <div className="product-display-right-star">
           <img src={star_icon} alt="" />
           <img src={star_icon} alt="" />
@@ -55,7 +54,7 @@ const ProductDisplay = (props) => {
             <div>xxl</div>
           </div>
         </div>
-        <button onClick={()=>addToCart(product.id)}>add to cart</button>
+        <button onClick={() => addToCart(product.id)}>add to cart</button>
         <div className="product-display-right-category-items">
           <p className="product-category-right-category">
             <span> Tategory:</span> Women, T-shirt, Crop Top

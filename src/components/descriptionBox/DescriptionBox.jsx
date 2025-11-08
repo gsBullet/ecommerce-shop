@@ -10,7 +10,12 @@ const DescriptionBox = () => {
       </div>
       <div className="descriptionbox-description">
         <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim cum neque laudantium. Saepe libero ratione animi sed similique quam iste quia culpa maxime rerum inventore, pariatur repellendus quidem, autem suscipit laudantium ullam ipsam expedita enim aperiam! Deserunt labore quam laudantium omnis dicta perferendis. Natus, minima qui! Cupiditate vitae quasi debitis.
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Enim cum
+          neque laudantium. Saepe libero ratione animi sed similique quam iste
+          quia culpa maxime rerum inventore, pariatur repellendus quidem, autem
+          suscipit laudantium ullam ipsam expedita enim aperiam! Deserunt labore
+          quam laudantium omnis dicta perferendis. Natus, minima qui! Cupiditate
+          vitae quasi debitis.
         </p>
       </div>
     </div>

@@ -18,6 +18,7 @@
   color: #171717;
   font-size: 50px;
   font-weight: 600;
+  text-align: center;
 }
 
 .loginsignup-fields {
@@ -40,6 +41,11 @@
   text-align: center;
   border: 1px solid red;
 } */
+.register-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .loginsignup-container button {
   width: 400px;
   height: 72px;
@@ -107,9 +113,9 @@
     padding-top: 50px;
   }
   .loginsignup-container {
-    width: auto;
+    /* width: auto; */
     max-width: 500px;
-    max-height: 500px;
+    max-height: 600px;
   }
   .loginsignup-container h1 {
     margin: 10px 0px;
@@ -117,6 +123,7 @@
   .loginsignup-fields {
     gap: 20px;
     margin-top: 20px;
+    align-items: center;
   }
   .loginsignup-fields input {
     height: 65px;
@@ -137,7 +144,8 @@
 
 @media (max-width: 800px) {
   .loginsignup-container {
-    padding: 20px 30px;
+    padding: 20px 50px;
+    max-height: 500px;
   }
   .loginsignup-container h1 {
     font-size: 24px;
@@ -151,6 +159,37 @@
   I .loginsignup-container button {
     height: 50px;
     font-size: 16px;
-    margin: auto;
+  }
+}
+
+@media (max-width: 500px) {
+  .loginsignup-container {
+    padding: 20px 30px;
+    max-width: 400px;
+    max-height: 480px;
+  }
+  .loginsignup-container h1 {
+    font-size: 30px;
+  }
+  .loginsignup-fields {
+    margin-top: 20px;
+  }
+  .loginsignup-fields input {
+    height: 50px;
+  }
+  .loginsignup-container button {
+    width: 60%;
+    height: 40px;
+    font-size: 20px;
+  }
+  .loginsignup-login{
+    font-size: 14px;
+  }
+  .loginsignup-agree{
+    font-size: 12px;
+  }
+  .loginsignup-agree input{
+    height: 20px;
+    width: 20px;
   }
 }
