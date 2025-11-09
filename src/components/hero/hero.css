@@ -110,7 +110,7 @@
   }
 }
 
-@media(max-width:500){
+@media(max-width:500px){
     .hero{
         flex-direction: column;
         

@@ -3,12 +3,13 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  height: 130vh;
+  /* height: 130vh; */
 }
 .relatedproducts h1 {
   color: #171717;
   font-size: 50px;
   font-weight: 600;
+  text-align: center;
 }
 .relatedproducts hr {
   width: 200px;
@@ -22,26 +23,34 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 30px;
+  margin: 50px 0px;
 }
 
 @media (max-width: 1280px) {
   .relatedproducts {
-    height: 55vh;
+    /* height: 55vh; */
   }
 }
 @media (max-width: 1024px) {
   .relatedproducts {
-    height: 85vh;
+    /* height: 85vh; */
   }
 }
 
 @media (max-width: 800px) {
   .relatedproducts {
-    height: 45vh;
+    /* height: 45vh; */
+  }
+  .relatedproducts-items {
+    gap: 30px;
   }
 }
 @media (max-width: 500px) {
   .relatedproducts {
-    height: 85vh;
+    /* height: 85vh; */
+    margin: 30px;
+  }
+  .relatedproducts h1{
+    text-align: center;
   }
 }
