@@ -3,6 +3,7 @@ import "./productDisplay.css";
 import star_icon from "../assets/Frontend_Assets/star_icon.png";
 import star_dull_icon from "../assets/Frontend_Assets/star_dull_icon.png";
 import { ShopContext } from "../../context/ShopContest";
+const BASE_URL = "http://localhost:9000/";
 
 const ProductDisplay = (props) => {
   const { addToCart } = useContext(ShopContext);
@@ -12,15 +13,14 @@ const ProductDisplay = (props) => {
     <div className="product-display">
       <div className="product-display-left ">
         <div className="product-display-img-list">
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
-          <img src={product.image} alt="" />
+          {product.related_image && (
+            <img src={BASE_URL + product.related_images} alt="" />
+          )}
         </div>
         <div className="product-display-img">
           <img
             className="product-display-main-img"
-            src={product.image}
+            src={BASE_URL + product.thumbnail}
             alt=""
           />
         </div>
@@ -43,7 +43,7 @@ const ProductDisplay = (props) => {
           </div>
         </div>
         <div className="product-display-right-description">
-          <p>{product.description}</p>
+          <pre>{product.description}</pre>
         </div>
         <div className="product-display-right-size">
           <h1>select size</h1>

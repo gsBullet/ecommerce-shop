@@ -5,6 +5,8 @@ import Item from "../components/items/Item";
 import "./css/shopcategory.css";
 
 const ShopCategory = (props) => {
+  console.log(props);
+  
   
   const { all_product } = useContext(ShopContext);
  
@@ -26,12 +28,12 @@ const ShopCategory = (props) => {
       </div>
       <div className="shopcategory-products">
         {all_product?.map((product) => {
-          if (product.category === props.category) {
+          if (product.category?.name?.toLowerCase() === props.category?.toLowerCase()) {
             return (
               <Item
                 key={product.id}
                 id={product.id}
-                image={product.image}
+                image={product.thumbnail}
                 name={product.name}
                 new_price={product.new_price}
                 old_price={product.old_price}
