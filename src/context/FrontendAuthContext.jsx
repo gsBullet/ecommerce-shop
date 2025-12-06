@@ -3,49 +3,40 @@ import Axios from "../service/Axios";
 
 export const FrontendAuthContext = createContext();
 const FrontendAuthContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const token = localStorage.getItem("usertoken");
 
-  const fetchAuthUser = async () => {
-    if (token) {
-      const response = await Axios.get("/auth/check-auth", {
-        headers: {
-          Authorization: `EcomToken ${token}`,
-        },
-      });
-      console.log(response);
-      
-
-      if (response.data) {
-        setUser(response.data);
-        setIsAuthenticated({
-          isAuth: true,
-          token,
-        });
-      }
-    }
-  };
-
   useEffect(() => {
+    const fetchAuthUser = async () => {
+      if (token) {
+        const response = await Axios.get("/auth/check-auth", {
+          headers: {
+            Authorization: `EcomToken ${token}`,
+          },
+        });
+
+        if (response.data) {
+          setUser(response.data?.data);
+          setIsAuthenticated({
+            isAuth: true,
+            token,
+          });
+        }
+      }
+    };
     fetchAuthUser();
-  }, [token]);
+  }, [isAuthenticated.isAuth]);
 
   const logout = () => {
     setUser(null);
     setIsAuthenticated(false);
+    localStorage.removeItem("usertoken");
   };
 
-  const authValue = {
-    user,
-    setUser,
-    isAuthenticated,
-    setIsAuthenticated,
-    logout,
-  };
   return (
     <FrontendAuthContext.Provider
-      value={authValue}
+      value={{ user, setUser, isAuthenticated, setIsAuthenticated, logout }}
     >
       {children}
     </FrontendAuthContext.Provider>

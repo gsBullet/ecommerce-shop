@@ -71,8 +71,8 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="loginregister flex items-center justify-center px-4 py-12">
-      <div className="max-w-xl w-full">
+    <div className="loginregister flex items-center justify-center  ">
+      <div className="max-w-xl w-full bg-white rounded-2xl shadow-xl p-8 ">
         {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-gray-900 text-center">

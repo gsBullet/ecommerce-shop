@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Axios from "../service/Axios"; // your axios instance
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import "./css/register.css";
 import SweetAlert from "../components/common/SweetAlert";
+import { FrontendAuthContext } from "../context/FrontendAuthContext";
 
 const Login = () => {
+  const { setUser, setIsAuthenticated } = useContext(FrontendAuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -26,25 +28,25 @@ const Login = () => {
 
     try {
       const res = await Axios.post("/auth/general-user-login", formData);
-      console.log('res',res);
+      console.log("res", res);
 
       if (res.data.success) {
-        // Save token (adjust according to your backend response)
         localStorage.setItem("usertoken", res.data.data.token);
-
-        // SweetAlert or toast
+        setIsAuthenticated({
+          isAuth: true,
+          token: res.data.data?.token,
+        });
+        setUser(res.data.data?.user);
         SweetAlert({
           icon: "success",
           title: res.data.message,
         });
-
-        // Redirect to homepage or dashboard
         navigate("/");
       }
     } catch (err) {
       SweetAlert({
         icon: "error",
-        title: err.response.data.message,
+        title: err.response.data?.message,
       });
     } finally {
       setLoading(false);
@@ -53,7 +55,7 @@ const Login = () => {
 
   return (
     <div className="loginsignup">
-      <div className="max-w-xl w-full m-auto">
+      <div className="max-w-lg w-full m-auto bg-white rounded-2xl shadow-xl p-8">
         {/* Logo / Brand */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-gray-900 text-center">

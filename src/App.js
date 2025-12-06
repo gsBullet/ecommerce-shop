@@ -16,10 +16,13 @@ import womenBanner from "./components/assets/Frontend_Assets/banner_women.png";
 import kidsBanner from "./components/assets/Frontend_Assets/banner_kids.png";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
+import ShopContextProvider from "./context/ShopContest";
+import ForgetPassword from "./pages/ForgetPassword";
 
 const App = () => {
   return (
     <HashRouter>
+      <ShopContextProvider>
         <Routes>
           <Route path="/" element={<FrontEndLayout />}>
             <Route index element={<Shop />} />
@@ -42,8 +45,10 @@ const App = () => {
             <Route path="/cart" element={<Cart />} />
             <Route path="/log-in" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgetPassword />} />
           </Route>
         </Routes>
+      </ShopContextProvider>
     </HashRouter>
   );
 };

@@ -5,7 +5,9 @@ import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../../context/ShopContest";
 import nav_dropdown from "../assets/Frontend_Assets/nav_dropdown.png";
 import "./navbar.css";
+import { FrontendAuthContext } from "../../context/FrontendAuthContext";
 const Navbar = () => {
+  const { isAuthenticated, logout } = useContext(FrontendAuthContext);
   const [menu, setMenu] = React.useState();
   const { getTotalCartAmount, getTotalCartItems } = useContext(ShopContext);
   const menuRef = useRef();
@@ -55,23 +57,37 @@ const Navbar = () => {
 
           {/* Right Section - Login & Cart */}
           <div className="flex items-center gap-6">
-            <Link
-              to="/log-in"
-              className="border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition"
-            >
-              Login
-            </Link>
+            {isAuthenticated.isAuth ? (
+              <>
+                <Link
+                  to="/dashboard"
+                  className="border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition "
+                >
+                  Dashboard
+                </Link>
+                <button
+                  onClick={() => logout()}
+                  className="border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition "
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <Link
+                to="/log-in"
+                className="border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition"
+              >
+                Login
+              </Link>
+            )}
+
             <Link
               to="/register"
-              className="border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition hidden"
+              className={`border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition ${
+                isAuthenticated.isAuth ? "hidden" : ""
+              }`}
             >
               Register
-            </Link>
-            <Link
-              to="/dashboard"
-              className="border border-gray-400 rounded-full px-5 py-1 text-gray-700 hover:bg-gray-500 hover:text-white transition hidden"
-            >
-              Dashboard
             </Link>
 
             {/* Cart Icon with Badge */}
