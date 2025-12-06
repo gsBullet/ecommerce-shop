@@ -9,24 +9,25 @@ const ProductDisplay = (props) => {
   const { addToCart } = useContext(ShopContext);
 
   const { product } = props;
+  
   return (
     <div className="product-display">
       <div className="product-display-left ">
         <div className="product-display-img-list">
-          {product.related_image && (
-            <img src={BASE_URL + product.related_images} alt="" />
+          {product?.related_image && (
+            <img src={BASE_URL + product?.related_images} alt="" />
           )}
         </div>
         <div className="product-display-img">
           <img
             className="product-display-main-img"
-            src={BASE_URL + product.thumbnail}
+            src={BASE_URL + product?.thumbnail}
             alt=""
           />
         </div>
       </div>
       <div className="product-display-right">
-        <h1>{product.name}</h1>
+        <h1>{product?.name}</h1>
         <div className="product-display-right-star">
           <img src={star_icon} alt="" />
           <img src={star_icon} alt="" />
@@ -36,14 +37,14 @@ const ProductDisplay = (props) => {
         </div>
         <div className="product-display-right-prices">
           <div className="product-display-right-old-prices">
-            ${product.old_price}
+            ${product?.old_price}
           </div>
           <div className="product-display-right-new-prices">
-            ${product.new_price}
+            ${product?.new_price}
           </div>
         </div>
         <div className="product-display-right-description">
-          <pre>{product.description}</pre>
+          <pre>{product?.description}</pre>
         </div>
         <div className="product-display-right-size">
           <h1>select size</h1>

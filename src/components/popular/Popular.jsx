@@ -1,19 +1,25 @@
 import React, { useContext } from "react";
 import "./popular.css";
-import data_products from "../assets/Frontend_Assets/data";
 import Item from "../items/Item";
 import { ShopContext } from "../../context/ShopContest";
 
 const Popular = () => {
   const { all_product } = useContext(ShopContext);
+
+  const womenProduct =
+    all_product?.filter(
+      (product) => product.category?.name?.toLowerCase() === "women" // ✅ SAFE & FIXED
+    ) || [];
+
   return (
     <div className="popular">
-      <h1>popular in women</h1>
+      <h1>Popular in Women</h1>
       <hr />
       <div className="popular-items">
-        {all_product?.map((item) => (
+        {womenProduct.map((item) => (
           <Item
-            key={item.id}
+            key={item._id} // ✅ FIXED KEY
+            id={item.id}
             image={item.thumbnail}
             name={item.name}
             new_price={item.new_price}

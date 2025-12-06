@@ -2,10 +2,16 @@ import React, { useContext } from "react";
 import "./cartItems.css";
 import { ShopContext } from "../../context/ShopContest";
 import remove_icon from "../../components/assets/Frontend_Assets/cart_cross_icon.png";
+const BASE_URL = "http://localhost:9000/";
 
 const CartItems = () => {
-  const { cartItems, removeFromCart, all_product, getTotalCartAmount } =
-    useContext(ShopContext);
+  const {
+    cartItems,
+    removeFromCart,
+    all_product,
+    getTotalCartAmount,
+    addToCart,
+  } = useContext(ShopContext);
   return (
     <div className="cartitems">
       <div className="cartitems-format-main">
@@ -28,13 +34,16 @@ const CartItems = () => {
                 className="cartitems-format cartitems-format-main "
               >
                 <img
-                  src={product.image}
-                  alt=""
+                  src={BASE_URL + product.thumbnail}
+                  alt={product.name}
                   className="carticon-product-icon"
                 />
                 <p>{product.name}</p>
                 <p>${product.new_price}</p>
-                <button className="cartItems-quantity">
+                <button
+                  onClick={() => addToCart(product.id)}
+                  className="cartItems-quantity"
+                >
                   {cartItems[product.id]}
                 </button>
                 <p>${product.new_price * cartItems[product.id]}</p>

@@ -1,71 +1,114 @@
 import React, { createContext, useEffect, useState } from "react";
 
 export const ShopContext = createContext(null);
+
 const ShopContextProvider = (props) => {
-  const [all_product, setAll_product] = useState();
-  console.log(all_product);
-  
+  const [all_product, setAll_product] = useState([]);
+  const [cartItems, setCartItems] = useState({});
 
-  const getDefaultCart = () => {
-    let cart = {};
-    for (let i = 1; i < all_product?.length + 1; i++) {
-      cart[i] = 0;
+  // ✅ Load Cart from LocalStorage
+  useEffect(() => {
+    const savedCart = localStorage.getItem("cartItems");
+    if (savedCart) {
+      setCartItems(JSON.parse(savedCart));
     }
-    return cart;
-  };
-  const [cartItems, setCartItems] = useState(getDefaultCart());
+  }, []);
 
+  // ✅ Fetch All Products
   const getAllProducts = async () => {
     try {
       const response = await fetch("http://localhost:9000/api/products");
       const data = await response.json();
+
       setAll_product(data.data);
+
+      // ✅ Initialize cart based on products
+      let cart = {};
+      data.data.forEach((product) => {
+        cart[product._id] = 0;
+      });
+
+      // ✅ Merge old saved cart with new product list
+      setCartItems((prev) => ({ ...cart, ...prev }));
     } catch (error) {
-      console.log(error);
+      console.log("Product Fetch Error:", error);
     }
   };
+
   useEffect(() => {
     getAllProducts();
   }, []);
 
+  // ✅ ✅ MODERN ADD TO CART
   const addToCart = (productId) => {
-    setCartItems((prev) => ({ ...prev, [productId]: prev[productId] + 1 }));
-    // console.log(cartItems);
+    setCartItems((prev) => {
+      const updatedCart = {
+        ...prev,
+        [productId]: (prev[productId] || 0) + 1,
+      };
+
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+      return updatedCart;
+    });
   };
 
+  // ✅ ✅ MODERN REMOVE FROM CART
   const removeFromCart = (productId) => {
-    setCartItems((prev) => ({ ...prev, [productId]: prev[productId] - 1 }));
+    setCartItems((prev) => {
+      const updatedCart = {
+        ...prev,
+        [productId]: prev[productId] > 0 ? prev[productId] - 1 : 0,
+      };
+
+      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+
+      return updatedCart;
+    });
   };
+
+  // ✅ ✅ TOTAL CART AMOUNT
   const getTotalCartAmount = () => {
     let totalAmount = 0;
+
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        let product = all_product.find(
-          (product) => product.id === Number(item)
+        const product = all_product.find(
+          (product) => product.id === item
         );
-        totalAmount += cartItems[item] * product.new_price;
+
+        if (product) {
+          totalAmount += cartItems[item] * product.new_price;
+        }
       }
     }
+
     return totalAmount;
   };
 
-  const getTotatCartItems = () => {
+  // ✅ ✅ TOTAL CART ITEM COUNT
+  const getTotalCartItems = () => {
     let totalItems = 0;
+
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
         totalItems += cartItems[item];
       }
     }
+
     return totalItems;
   };
+
   const contextValue = {
     all_product,
     cartItems,
     addToCart,
     removeFromCart,
     getTotalCartAmount,
-    getTotatCartItems,
+    getTotalCartItems,
+    getAllProducts,
   };
+
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContest";
 import { useParams } from "react-router-dom";
 import Breadcum from "../components/breadcums/Breadcum";
@@ -7,21 +7,23 @@ import DescriptionBox from "../components/descriptionBox/DescriptionBox";
 import RelatedProducts from "../components/relatedProducts/RelatedProducts";
 
 const Product = () => {
-  const { all_product } = useContext(ShopContext);
+  const { all_product, getAllProducts } = useContext(ShopContext);
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   const { productId } = useParams();
   const product = all_product?.find(
     (product) => product.id === productId || product.id === Number(productId)
   );
 
-  console.log(all_product);
-
   return (
     <div>
       <Breadcum product={product} />
       <ProductDisplay product={product} />
       <DescriptionBox />
-      <RelatedProducts />
+      <RelatedProducts category={product?.category?.name} />
     </div>
   );
 };

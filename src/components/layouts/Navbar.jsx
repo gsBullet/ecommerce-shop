@@ -7,7 +7,7 @@ import nav_dropdown from "../assets/Frontend_Assets/nav_dropdown.png";
 import "./navbar.css";
 const Navbar = () => {
   const [menu, setMenu] = React.useState();
-  const { getTotatCartItems } = useContext(ShopContext);
+  const { getTotalCartAmount, getTotalCartItems } = useContext(ShopContext);
   const menuRef = useRef();
 
   const dropdrownToggle = (e) => {
@@ -78,7 +78,7 @@ const Navbar = () => {
             <Link to="/cart" className="relative cursor-pointer">
               <img src={cartIcon} alt="Cart" className="w-6 h-6 text-red-600" />
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                {getTotatCartItems()}
+                <p> {getTotalCartItems()}</p>
               </span>
             </Link>
           </div>
