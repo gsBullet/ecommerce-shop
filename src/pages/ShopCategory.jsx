@@ -37,6 +37,7 @@ const ShopCategory = (props) => {
                 name={product.name}
                 new_price={product.new_price}
                 old_price={product.old_price}
+                quantity={product.quantity}
               />
             );
           } else {

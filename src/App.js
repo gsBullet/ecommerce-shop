@@ -18,11 +18,12 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import ShopContextProvider from "./context/ShopContest";
 import ForgetPassword from "./pages/ForgetPassword";
+import FrontendAuthContextProvider from "./context/FrontendAuthContext";
 
 const App = () => {
   return (
     <HashRouter>
-      <ShopContextProvider>
+      <FrontendAuthContextProvider>
         <Routes>
           <Route path="/" element={<FrontEndLayout />}>
             <Route index element={<Shop />} />
@@ -48,7 +49,7 @@ const App = () => {
             <Route path="/forgot-password" element={<ForgetPassword />} />
           </Route>
         </Routes>
-      </ShopContextProvider>
+      </FrontendAuthContextProvider>
     </HashRouter>
   );
 };

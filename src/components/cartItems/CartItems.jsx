@@ -12,6 +12,10 @@ const CartItems = () => {
     getTotalCartAmount,
     addToCart,
   } = useContext(ShopContext);
+
+
+
+  
   return (
     <div className="cartitems">
       <div className="cartitems-format-main">

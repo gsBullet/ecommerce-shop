@@ -6,10 +6,10 @@ import { ShopContext } from "../../context/ShopContest";
 const BASE_URL = "http://localhost:9000/";
 
 const ProductDisplay = (props) => {
-  const { addToCart } = useContext(ShopContext);
+  const { addToCart, getTotalCartItems } = useContext(ShopContext);
 
   const { product } = props;
-  
+
   return (
     <div className="product-display">
       <div className="product-display-left ">
@@ -37,14 +37,14 @@ const ProductDisplay = (props) => {
         </div>
         <div className="product-display-right-prices">
           <div className="product-display-right-old-prices">
-            ${product?.old_price}
+            ${"Old Price: " + product?.old_price}
           </div>
           <div className="product-display-right-new-prices">
-            ${product?.new_price}
+            ${"New Price:" + product?.new_price}
           </div>
         </div>
         <div className="product-display-right-description">
-          <pre>{product?.description}</pre>
+          <p>{product?.description}</p>
         </div>
         <div className="product-display-right-size">
           <h1>select size</h1>
@@ -55,13 +55,27 @@ const ProductDisplay = (props) => {
             <div>xxl</div>
           </div>
         </div>
-        <button onClick={() => addToCart(product.id)}>add to cart</button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addToCart(product.id);
+          }}
+          disabled={parseInt(product?.quantity) === getTotalCartItems()}
+        >
+          ADD TO CART
+        </button>
         <div className="product-display-right-category-items">
           <p className="product-category-right-category">
             <span> Tategory:</span> Women, T-shirt, Crop Top
           </p>
           <p className="product-category-right-category">
             <span> Tags:</span> Mordern, Latest
+          </p>
+          <p className="product-category-right-category">
+            <span>{"Quantity: " + product?.quantity}</span>
           </p>
         </div>
       </div>

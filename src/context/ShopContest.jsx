@@ -1,12 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
+import Axios from "../service/Axios";
 
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = (props) => {
   const [all_product, setAll_product] = useState([]);
   const [cartItems, setCartItems] = useState({});
+  // console.log('cart',cartItems);
 
-  // ✅ Load Cart from LocalStorage
   useEffect(() => {
     const savedCart = localStorage.getItem("cartItems");
     if (savedCart) {
@@ -17,18 +18,16 @@ const ShopContextProvider = (props) => {
   // ✅ Fetch All Products
   const getAllProducts = async () => {
     try {
-      const response = await fetch("http://localhost:9000/api/products");
-      const data = await response.json();
+      const response = await Axios.get("products");
+      console.log(response);
+      setAll_product(response.data.data);
 
-      setAll_product(data.data);
 
-      // ✅ Initialize cart based on products
       let cart = {};
-      data.data.forEach((product) => {
+      response.data.data.forEach((product) => {
         cart[product._id] = 0;
       });
 
-      // ✅ Merge old saved cart with new product list
       setCartItems((prev) => ({ ...cart, ...prev }));
     } catch (error) {
       console.log("Product Fetch Error:", error);
@@ -39,7 +38,6 @@ const ShopContextProvider = (props) => {
     getAllProducts();
   }, []);
 
-  // ✅ ✅ MODERN ADD TO CART
   const addToCart = (productId) => {
     setCartItems((prev) => {
       const updatedCart = {
@@ -53,7 +51,6 @@ const ShopContextProvider = (props) => {
     });
   };
 
-  // ✅ ✅ MODERN REMOVE FROM CART
   const removeFromCart = (productId) => {
     setCartItems((prev) => {
       const updatedCart = {
@@ -67,15 +64,12 @@ const ShopContextProvider = (props) => {
     });
   };
 
-  // ✅ ✅ TOTAL CART AMOUNT
   const getTotalCartAmount = () => {
     let totalAmount = 0;
 
     for (const item in cartItems) {
       if (cartItems[item] > 0) {
-        const product = all_product.find(
-          (product) => product.id === item
-        );
+        const product = all_product.find((product) => product.id === item);
 
         if (product) {
           totalAmount += cartItems[item] * product.new_price;
@@ -86,7 +80,6 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
-  // ✅ ✅ TOTAL CART ITEM COUNT
   const getTotalCartItems = () => {
     let totalItems = 0;
 

@@ -4,12 +4,13 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import FrontendAuthContextProvider from "./context/FrontendAuthContext";
+import ShopContextProvider from "./context/ShopContest";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <FrontendAuthContextProvider>
+  <ShopContextProvider>
     <App />
-  </FrontendAuthContextProvider>
+  </ShopContextProvider>
 );
 
 reportWebVitals();

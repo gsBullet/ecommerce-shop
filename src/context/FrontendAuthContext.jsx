@@ -23,6 +23,11 @@ const FrontendAuthContextProvider = ({ children }) => {
             token,
           });
         }
+        
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+        localStorage.removeItem("usertoken");
       }
     };
     fetchAuthUser();

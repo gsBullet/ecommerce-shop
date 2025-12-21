@@ -9,7 +9,7 @@ import { FrontendAuthContext } from "../../context/FrontendAuthContext";
 const Navbar = () => {
   const { isAuthenticated, logout } = useContext(FrontendAuthContext);
   const [menu, setMenu] = React.useState();
-  const { getTotalCartAmount, getTotalCartItems } = useContext(ShopContext);
+  const { getTotalCartItems } = useContext(ShopContext);
   const menuRef = useRef();
 
   const dropdrownToggle = (e) => {

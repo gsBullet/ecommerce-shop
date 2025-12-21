@@ -23,6 +23,7 @@ const RelatedProducts = (props) => {
             name={item.name}
             new_price={item.new_price}
             old_price={item.old_price}
+            quantity={item.quantity}
           />
         ))}
       </div>
