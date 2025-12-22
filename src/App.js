@@ -16,9 +16,10 @@ import womenBanner from "./components/assets/Frontend_Assets/banner_women.png";
 import kidsBanner from "./components/assets/Frontend_Assets/banner_kids.png";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
-import ShopContextProvider from "./context/ShopContest";
 import ForgetPassword from "./pages/ForgetPassword";
 import FrontendAuthContextProvider from "./context/FrontendAuthContext";
+import CheckoutPage from "./pages/CheckoutPage";
+import ManualPayment from "./pages/ManualPayment";
 
 const App = () => {
   return (
@@ -44,10 +45,12 @@ const App = () => {
               <Route path=":productId" element={<Product />} />
             </Route>
             <Route path="/cart" element={<Cart />} />
-            <Route path="/log-in" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgetPassword />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/checkout/manual-payment" element={<ManualPayment />} />
           </Route>
+          <Route path="/log-in" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgetPassword />} />
         </Routes>
       </FrontendAuthContextProvider>
     </HashRouter>

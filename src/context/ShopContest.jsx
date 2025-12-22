@@ -1,110 +1,90 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState, useCallback } from "react";
 import Axios from "../service/Axios";
 
 export const ShopContext = createContext(null);
 
-const ShopContextProvider = (props) => {
-  const [all_product, setAll_product] = useState([]);
-  const [cartItems, setCartItems] = useState({});
-  // console.log('cart',cartItems);
+const CART_STORAGE_KEY = "cart_v1";
 
-  useEffect(() => {
-    const savedCart = localStorage.getItem("cartItems");
-    if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
-    }
-  }, []);
-
-  // ✅ Fetch All Products
-  const getAllProducts = async () => {
+const ShopContextProvider = ({ children }) => {
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
     try {
-      const response = await Axios.get("products");
-      console.log(response);
-      setAll_product(response.data.data);
+      return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || {};
+    } catch {
+      return {};
+    }
+  });
 
-
-      let cart = {};
-      response.data.data.forEach((product) => {
-        cart[product._id] = 0;
-      });
-
-      setCartItems((prev) => ({ ...cart, ...prev }));
-    } catch (error) {
-      console.log("Product Fetch Error:", error);
+  /* ---------------- FETCH PRODUCTS ---------------- */
+  const fetchProducts = async () => {
+    try {
+      const res = await Axios.get("products");
+      setProducts(res.data.data || []);
+    } catch (err) {
+      console.error("Product fetch failed", err);
     }
   };
 
   useEffect(() => {
-    getAllProducts();
+    fetchProducts();
   }, []);
 
-  const addToCart = (productId) => {
+  /* ---------------- PERSIST CART ---------------- */
+  useEffect(() => {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  /* ---------------- CART ACTIONS ---------------- */
+  const addToCart = useCallback((productId) => {
+    setCartItems((prev) => ({
+      ...prev,
+      [productId]: (prev[productId] || 0) + 1,
+    }));
+  }, []);
+
+  const removeFromCart = useCallback((productId) => {
     setCartItems((prev) => {
-      const updatedCart = {
-        ...prev,
-        [productId]: (prev[productId] || 0) + 1,
-      };
+      if (!prev[productId]) return prev;
 
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+      const updated = { ...prev };
 
-      return updatedCart;
-    });
-  };
-
-  const removeFromCart = (productId) => {
-    setCartItems((prev) => {
-      const updatedCart = {
-        ...prev,
-        [productId]: prev[productId] > 0 ? prev[productId] - 1 : 0,
-      };
-
-      localStorage.setItem("cartItems", JSON.stringify(updatedCart));
-
-      return updatedCart;
-    });
-  };
-
-  const getTotalCartAmount = () => {
-    let totalAmount = 0;
-
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        const product = all_product.find((product) => product.id === item);
-
-        if (product) {
-          totalAmount += cartItems[item] * product.new_price;
-        }
+      if (updated[productId] === 1) {
+        delete updated[productId]; // 🔥 remove zero values
+      } else {
+        updated[productId]--;
       }
-    }
 
-    return totalAmount;
-  };
+      return updated;
+    });
+  }, []);
 
-  const getTotalCartItems = () => {
-    let totalItems = 0;
+  const clearCart = () => setCartItems({});
 
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        totalItems += cartItems[item];
-      }
-    }
+  /* ---------------- CART HELPERS ---------------- */
+  const getTotalItems = () =>
+    Object.values(cartItems).reduce((a, b) => a + b, 0);
 
-    return totalItems;
-  };
-
-  const contextValue = {
-    all_product,
-    cartItems,
-    addToCart,
-    removeFromCart,
-    getTotalCartAmount,
-    getTotalCartItems,
-    getAllProducts,
-  };
-
+  const getTotalAmount = () =>
+    Object.entries(cartItems).reduce((total, [id, qty]) => {
+      const product = products.find((p) => p.id === id);
+      return product ? total + product.new_price * qty : total;
+    }, 0);
+  
+  /* ---------------- CONTEXT ---------------- */
   return (
-    <ShopContext.Provider value={contextValue}>
-      {props.children}
+    <ShopContext.Provider
+      value={{
+        products,
+        cartItems,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        getTotalItems,
+        getTotalAmount,
+        fetchProducts
+      }}
+    >
+      {children}
     </ShopContext.Provider>
   );
 };

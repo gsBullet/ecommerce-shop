@@ -9,7 +9,7 @@ import { FrontendAuthContext } from "../../context/FrontendAuthContext";
 const Navbar = () => {
   const { isAuthenticated, logout } = useContext(FrontendAuthContext);
   const [menu, setMenu] = React.useState();
-  const { getTotalCartItems } = useContext(ShopContext);
+  const { getTotalItems } = useContext(ShopContext);
   const menuRef = useRef();
 
   const dropdrownToggle = (e) => {
@@ -94,7 +94,7 @@ const Navbar = () => {
             <Link to="/cart" className="relative cursor-pointer">
               <img src={cartIcon} alt="Cart" className="w-6 h-6 text-red-600" />
               <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
-                <p> {getTotalCartItems()}</p>
+                <p> {getTotalItems()}</p>
               </span>
             </Link>
           </div>

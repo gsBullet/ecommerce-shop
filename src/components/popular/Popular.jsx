@@ -4,7 +4,7 @@ import Item from "../items/Item";
 import { ShopContext } from "../../context/ShopContest";
 
 const Popular = () => {
-  const { all_product } = useContext(ShopContext);
+  const { products:all_product } = useContext(ShopContext);
 
   const womenProduct =
     all_product?.filter(

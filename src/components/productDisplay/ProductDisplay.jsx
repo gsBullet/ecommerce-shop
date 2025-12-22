@@ -3,20 +3,41 @@ import "./productDisplay.css";
 import star_icon from "../assets/Frontend_Assets/star_icon.png";
 import star_dull_icon from "../assets/Frontend_Assets/star_dull_icon.png";
 import { ShopContext } from "../../context/ShopContest";
+import SweetAlert from "../common/SweetAlert";
 const BASE_URL = "http://localhost:9000/";
 
 const ProductDisplay = (props) => {
-  const { addToCart, getTotalCartItems } = useContext(ShopContext);
+  const { addToCart, getTotalItems } = useContext(ShopContext);
 
   const { product } = props;
+  const handleAddToCart = (productId) => {
+    if (getTotalItems() >= product?.quantity) {
+      SweetAlert({
+        title: "Out of Stock",
+        icon: "warning",
+      });
+    } else {
+      addToCart(productId);
+      SweetAlert({
+        title: "Product Added Successfully",
+        icon: "success",
+      });
+    }
+  };
 
   return (
     <div className="product-display">
       <div className="product-display-left ">
         <div className="product-display-img-list">
-          {product?.related_image && (
-            <img src={BASE_URL + product?.related_images} alt="" />
-          )}
+          {product?.related_images.length &&
+            product?.related_images.map((image, index) => (
+              <img
+                key={index}
+                className="product-display-sub-img"
+                src={BASE_URL + image}
+                alt=""
+              />
+            ))}
         </div>
         <div className="product-display-img">
           <img
@@ -40,7 +61,7 @@ const ProductDisplay = (props) => {
             ${"Old Price: " + product?.old_price}
           </div>
           <div className="product-display-right-new-prices">
-            ${"New Price:" + product?.new_price}
+            ${"New Price: " + product?.new_price}
           </div>
         </div>
         <div className="product-display-right-description">
@@ -48,7 +69,7 @@ const ProductDisplay = (props) => {
         </div>
         <div className="product-display-right-size">
           <h1>select size</h1>
-          <div className="product-display-right-sizes">
+          <div className="product-display-right-sizes ">
             <div>S</div>
             <div>M</div>
             <div>Xl</div>
@@ -56,15 +77,7 @@ const ProductDisplay = (props) => {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            addToCart(product.id);
-          }}
-          disabled={parseInt(product?.quantity) === getTotalCartItems()}
-        >
+        <button type="button" onClick={()=>handleAddToCart(product.id)}>
           ADD TO CART
         </button>
         <div className="product-display-right-category-items">

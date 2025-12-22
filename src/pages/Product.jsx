@@ -7,14 +7,14 @@ import DescriptionBox from "../components/descriptionBox/DescriptionBox";
 import RelatedProducts from "../components/relatedProducts/RelatedProducts";
 
 const Product = () => {
-  const { all_product, getAllProducts } = useContext(ShopContext);
+  const { products, fetchProducts } = useContext(ShopContext);
 
   useEffect(() => {
-    getAllProducts();
+    fetchProducts();
   }, []);
 
   const { productId } = useParams();
-  const product = all_product?.find(
+  const product = products?.find(
     (product) => product.id === productId || product.id === Number(productId)
   );
 

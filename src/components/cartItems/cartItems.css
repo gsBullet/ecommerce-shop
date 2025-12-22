@@ -111,6 +111,25 @@
   font-weight: 600;
   cursor: pointer;
 }
+.cartitems-clearcartbox{
+  width: 504px;
+  height: 58px;
+  margin-top: 15px;
+  padding-left: 20px;
+}
+.cartitems-clearcartbox button {
+
+  width: 170px;
+  height: 58px;
+  border: none;
+  outline: none;
+  background: brown;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  float: inline-end;
+}
 .cartitems-total-item h3 {
   /* border-bottom: 1px solid #e2e2e2; */
   font-weight: 600;

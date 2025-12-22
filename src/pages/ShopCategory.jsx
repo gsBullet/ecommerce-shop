@@ -8,7 +8,7 @@ const ShopCategory = (props) => {
   console.log(props);
   
   
-  const { all_product } = useContext(ShopContext);
+  const { products:all_product } = useContext(ShopContext);
  
   return (
     <div className="shop-category">

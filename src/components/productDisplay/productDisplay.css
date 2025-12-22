@@ -14,10 +14,10 @@
   gap: 16px;
 }
 .product-display-img-list img {
-  height: 170px;
+  height: 210px;
 }
 .product-display-main-img {
-  height: 730px;
+  height: 660px;
   width: 620px;
 }
 .product-display-right {
@@ -112,7 +112,7 @@
     gap: 10px;
   }
   .product-display-img-list img {
-    height: 120px;
+    height: 163px;
   }
   .product-display-main-img {
     width: auto;
@@ -232,4 +232,15 @@
     cursor: pointer;
     text-transform: capitalize;
   }
+}
+
+@media (max-width: 500px) {
+  .product-display-img-list img {
+    height: 120px;
+  }
+  .product-display-main-img {
+    width: auto;
+    height: 382px;
+  }
+ 
 }
