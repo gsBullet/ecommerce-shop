@@ -1,4 +1,4 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, {  useContext,  } from "react";
 import "./cartItems.css";
 import { ShopContext } from "../../context/ShopContest";
 import remove_icon from "../../components/assets/Frontend_Assets/cart_cross_icon.png";
@@ -15,20 +15,8 @@ const CartItems = () => {
     clearCart,
   } = useContext(ShopContext);
   const navigate = useNavigate();
-  const [deliveryMethod, setDeliveryMethod] = useState("inside-dhaka");
-  const [deliveryFee, setDeliveryFee] = useState(60);
-  // Handle delivery method change
-  const handleDeliveryChange = (e) => {
-    setDeliveryMethod(e.target.value);
-  };
 
-  useEffect(() => {
-    if (deliveryMethod === "inside-dhaka") {
-      setDeliveryFee(60);
-    } else {
-      setDeliveryFee(120);
-    }
-  }, [deliveryMethod]);
+
 
   return (
     <div className="cartitems">
@@ -76,63 +64,15 @@ const CartItems = () => {
 
       <div className="cartitems-down">
         <div className="cartitems-total">
-          <h1>Cart Totals</h1>
+          
           <div>
-            <div className="cartitems-total-item">
-              <p>Sub total</p>
-              <p>${getTotalAmount()}</p>
-            </div>
+           
             <hr />
-            <div className="cartitems-total-item">
-              {/* Delivery Method Section */}
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b">
-                  Delivery Method
-                </h2>
-
-                <div className="space-y-3">
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="inside-dhaka"
-                      name="deliveryMethod"
-                      value="inside-dhaka"
-                      checked={deliveryMethod === "inside-dhaka"}
-                      onChange={handleDeliveryChange}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="inside-dhaka"
-                      className="ml-3 block text-sm font-medium text-gray-700"
-                    >
-                      Inside Dhaka - 60₹
-                    </label>
-                  </div>
-
-                  <div className="flex items-center">
-                    <input
-                      type="radio"
-                      id="outside-dhaka"
-                      name="deliveryMethod"
-                      value="outside-dhaka"
-                      checked={deliveryMethod === "outside-dhaka"}
-                      onChange={handleDeliveryChange}
-                      className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                    />
-                    <label
-                      htmlFor="outside-dhaka"
-                      className="ml-3 block text-sm font-medium text-gray-700"
-                    >
-                      Outside Dhaka - 120₹
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
             <hr />
             <div className="cartitems-total-item">
               <h3>Total</h3>
-              <h3>${getTotalAmount() + deliveryFee}</h3>
+              <h3>${getTotalAmount()}</h3>
             </div>
           </div>
           <button onClick={() => navigate("/checkout")}>

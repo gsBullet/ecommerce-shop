@@ -1,8 +1,8 @@
 import Axios from "./Axios";
 
-export const updateUserInfo = ({ formData, token, userId }) => {
-  const response = Axios.post(
-   `auth/general-user-update-info/${userId}`,
+export const updateUserInfo = async ({ formData, token, userId }) => {
+  const response = await Axios.post(
+    `auth/general-user-update-info/${userId}`,
     {
       formData,
     },

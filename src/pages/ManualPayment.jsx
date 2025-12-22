@@ -1,26 +1,59 @@
-import { useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+
+import { FrontendAuthContext } from "../context/FrontendAuthContext";
+import { ManualPaymentService } from "../service/Payment";
+import SweetAlert from "../components/common/SweetAlert";
 
 export default function ManualPayment() {
+  const { user, isAuthenticated } = useContext(FrontendAuthContext);
+
+  const products = JSON.parse(localStorage.getItem("cart_v1")) || [];
+
   const [form, setForm] = useState({
-    method: "bkash",
+    paymentMethod: "bkash",
     phone: "",
     trxId: "",
-    amount: ""
+    amount: 0,
   });
+  useEffect(() => {
+    setForm({
+      ...form,
+      customerId: user?._id,
+      products,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated?.isAuth]);
 
-  const submitPayment = async () => {
-    await axios.post("http://localhost:5000/api/payment/manual", form);
-    alert("Payment Submitted!");
+  const submitPayment = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await ManualPaymentService(form, isAuthenticated.token);
+      if (response?.success) {
+        SweetAlert({
+          icon: "success",
+          title: response.message,
+        });
+      } else {
+        SweetAlert({
+          icon: "error",
+          title: response.message,
+        });
+      }
+    } catch (error) {
+      SweetAlert({
+        icon: "error",
+        title: error.response.data.message,
+      });
+    }
   };
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white shadow rounded">
+    <div className="p-10 max-w-md mx-auto bg-white shadow rounded">
       <h2 className="text-xl font-bold mb-4">Manual Payment</h2>
 
       <select
         className="border p-2 w-full"
-        onChange={(e) => setForm({ ...form, method: e.target.value })}
+        onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
       >
         <option value="bkash">bKash</option>
         <option value="nagad">Nagad</option>
@@ -28,21 +61,28 @@ export default function ManualPayment() {
       </select>
 
       <input
+        type="tel"
         className="border p-2 w-full mt-2"
         placeholder="Your Phone Number"
         onChange={(e) => setForm({ ...form, phone: e.target.value })}
+        required
       />
 
       <input
+        type="text"
         className="border p-2 w-full mt-2"
         placeholder="Transaction ID"
         onChange={(e) => setForm({ ...form, trxId: e.target.value })}
+        required
       />
 
       <input
+        type="number"
+        name="Amount"
         className="border p-2 w-full mt-2"
         placeholder="Amount"
         onChange={(e) => setForm({ ...form, amount: e.target.value })}
+        required
       />
 
       <button

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContest";
 import { useNavigate } from "react-router-dom";
 import { FrontendAuthContext } from "../context/FrontendAuthContext";
@@ -8,6 +8,11 @@ import SweetAlert from "../components/common/SweetAlert";
 const CheckoutPage = () => {
   const { cartItems, products: all_product } = useContext(ShopContext);
   const { user, isAuthenticated } = useContext(FrontendAuthContext);
+  const [deliveryFee, setDeliveryFee] = useState(60);
+
+  // State for delivery method
+  const [deliveryMethod, setDeliveryMethod] = useState('inside-dhaka');
+
   const navigate = useNavigate();
   // State for customer information
   const [customerInfo, setCustomerInfo] = useState({
@@ -18,19 +23,8 @@ const CheckoutPage = () => {
     state: "",
     city: "",
     postalCode: "",
+    deliveryMethod
   });
-
-  // Order details
-  const orderDetails = {
-    product: "Logitech 960-001038 Video Conference Cam Connect",
-    price: 65000,
-    quantity: 1,
-    deliveryFee: 60,
-  };
-
-  // Calculate total
-  const subtotal = orderDetails.price * orderDetails.quantity;
-  const total = subtotal + orderDetails.deliveryFee;
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -40,17 +34,30 @@ const CheckoutPage = () => {
       [name]: value,
     });
   };
+    // Handle delivery method change
+  const handleDeliveryChange = (e) => {
+    setDeliveryMethod(e.target.value);
+  };
+
+  useEffect(() => {
+    if (deliveryMethod === 'inside-dhaka') {
+      setDeliveryFee(60);
+    } else {
+      setDeliveryFee(120);
+    }
+  }, [deliveryMethod])
+  
+
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Process the order here
-    const response = await updateUserInfo({
+    let response = await updateUserInfo({
       formData: customerInfo,
       token: isAuthenticated ? user.token : null,
       userId: isAuthenticated ? user._id : null,
     });
-    console.log(response);
 
     if (response?.success) {
       SweetAlert({
@@ -61,10 +68,15 @@ const CheckoutPage = () => {
     } else {
       SweetAlert({
         icon: "error",
-        title: "Failed to update user info",
+        title: response?.message || "Failed to update user info",
       });
     }
   };
+
+  const totalAmount = all_product
+    .filter((product) => cartItems[product.id])
+    .reduce((sum, item) => sum + item.new_price * cartItems[item.id], 0);
+  // console.log(totalAmount);
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -100,16 +112,16 @@ const CheckoutPage = () => {
 
                 <div>
                   <label
-                    htmlFor="phoneNumber"
+                    htmlFor="phone"
                     className="block text-sm font-medium text-gray-700 mb-1"
                   >
                     Phone Number
                   </label>
                   <input
                     type="tel"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    value={customerInfo.phoneNumber}
+                    id="phone"
+                    name="phone"
+                    value={customerInfo.phone}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
@@ -205,6 +217,50 @@ const CheckoutPage = () => {
                 </div>
               </div>
             </div>
+            {/* Delivery Method Section */}
+            <div className="mb-8">
+              <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b">
+                Delivery Method
+              </h2>
+
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="inside-dhaka"
+                    name="deliveryMethod"
+                    value="inside-dhaka"
+                    checked={deliveryMethod === "inside-dhaka"}
+                    onChange={handleDeliveryChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="inside-dhaka"
+                    className="ml-3 block text-sm font-medium text-gray-700"
+                  >
+                    Inside Dhaka - 60₹
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="outside-dhaka"
+                    name="deliveryMethod"
+                    value="outside-dhaka"
+                    checked={deliveryMethod === "outside-dhaka"}
+                    onChange={handleDeliveryChange}
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                  />
+                  <label
+                    htmlFor="outside-dhaka"
+                    className="ml-3 block text-sm font-medium text-gray-700"
+                  >
+                    Outside Dhaka - 120₹
+                  </label>
+                </div>
+              </div>
+            </div>
 
             {/* Order Overview Section */}
             <div className="mb-8">
@@ -263,14 +319,14 @@ const CheckoutPage = () => {
                       ))}
                   </tbody>
                   <tfoot>
-                    {/* <tr>
+                    <tr>
                       <td colSpan="3" className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
                         Delivery Fee:
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {orderDetails.deliveryFee}₹
+                        {deliveryFee}$
                       </td>
-                    </tr> */}
+                    </tr>
                     <tr>
                       <td
                         colSpan="3"
@@ -279,7 +335,7 @@ const CheckoutPage = () => {
                         Total:
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        {total}₹
+                        {deliveryFee+ totalAmount}$
                       </td>
                     </tr>
                   </tfoot>
