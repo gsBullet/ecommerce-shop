@@ -70,14 +70,14 @@ const ProductDisplay = (props) => {
         <div className="product-display-right-size">
           <h1>select size</h1>
           <div className="product-display-right-sizes ">
-            <div>S</div>
-            <div>M</div>
-            <div>Xl</div>
-            <div>xxl</div>
+            <span>S</span>
+            <span>M</span>
+            <span>Xl</span>
+            <span>xxl</span>
           </div>
         </div>
 
-        <button type="button" onClick={()=>handleAddToCart(product.id)}>
+        <button type="button" onClick={() => handleAddToCart(product.id)}>
           ADD TO CART
         </button>
         <div className="product-display-right-category-items">

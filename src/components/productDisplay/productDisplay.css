@@ -67,7 +67,7 @@
   gap: 20px;
 }
 
-.product-display-right-sizes div {
+.product-display-right-sizes span {
   padding: 18px 24px;
   background: #fbfbfb;
   border: 1px solid #ebebebeb;
@@ -171,7 +171,7 @@
   .product-display-right-sizes {
     margin: 10px 0px;
   }
-  .product-display-right-sizes div {
+  .product-display-right-sizes span {
     padding: 14px 20px;
   }
   .product-display-right button {
@@ -217,7 +217,7 @@
   .product-display-right-sizes {
     margin: 10px 0px;
   }
-  .product-display-right-sizes div {
+  .product-display-right-sizes span {
     padding: 14px 20px;
   }
   .product-display-right button {

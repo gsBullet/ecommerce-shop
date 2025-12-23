@@ -4,12 +4,13 @@ import Item from "../items/Item";
 import { ShopContext } from "../../context/ShopContest";
 
 const RelatedProducts = (props) => {
-  const { all_product } = useContext(ShopContext);
+  const { products:all_product } = useContext(ShopContext);
 
   const related_product = all_product?.filter(
     (product) =>
       product.category?.name?.toLowerCase() === props.category?.toLowerCase()
   );
+  
   return (
     <div className="relatedproducts container m-auto">
       <h1>Related Products</h1>
