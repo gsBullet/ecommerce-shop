@@ -1,4 +1,4 @@
-import React, {  useContext,  } from "react";
+import React, { useContext } from "react";
 import "./cartItems.css";
 import { ShopContext } from "../../context/ShopContest";
 import remove_icon from "../../components/assets/Frontend_Assets/cart_cross_icon.png";
@@ -13,10 +13,11 @@ const CartItems = () => {
     getTotalAmount,
     addToCart,
     clearCart,
+    getTotalItems,
   } = useContext(ShopContext);
   const navigate = useNavigate();
 
-
+  console.log(getTotalItems());
 
   return (
     <div className="cartitems">
@@ -64,18 +65,20 @@ const CartItems = () => {
 
       <div className="cartitems-down">
         <div className="cartitems-total">
-          
           <div>
            
-            <hr />
-            
+
             <hr />
             <div className="cartitems-total-item">
               <h3>Total</h3>
               <h3>${getTotalAmount()}</h3>
             </div>
           </div>
-          <button onClick={() => navigate("/checkout")}>
+          <button
+            disabled={getTotalItems() === 0}
+            className="cartitems-checkout-btn"
+            onClick={() => navigate("/checkout")}
+          >
             PROCEED TO CHECKOUT
           </button>
         </div>

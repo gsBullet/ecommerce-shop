@@ -9,9 +9,10 @@ const CheckoutPage = () => {
   const { cartItems, products: all_product } = useContext(ShopContext);
   const { user, isAuthenticated } = useContext(FrontendAuthContext);
   const [deliveryFee, setDeliveryFee] = useState(60);
+ 
 
   // State for delivery method
-  const [deliveryMethod, setDeliveryMethod] = useState('inside-dhaka');
+  const [deliveryMethod, setDeliveryMethod] = useState("inside-dhaka");
 
   const navigate = useNavigate();
   // State for customer information
@@ -23,8 +24,21 @@ const CheckoutPage = () => {
     state: "",
     city: "",
     postalCode: "",
-    deliveryMethod
+    deliveryMethod,
   });
+
+  useEffect(() => {
+    setCustomerInfo({
+      fullName: user?.addresses[0]?.fullName,
+      phone: user?.addresses[0]?.phone,
+      email: user?.addresses[0]?.email,
+      address: user?.addresses[0]?.address,
+      state: user?.addresses[0]?.state,
+      city: user?.addresses[0]?.city,
+      postalCode: user?.addresses[0]?.postalCode,
+      deliveryMethod: user?.addresses[0]?.deliveryMethod || "inside-dhaka",
+    });
+  }, [isAuthenticated?.isAuth, user?.addresses]);
 
   // Handle input changes
   const handleInputChange = (e) => {
@@ -34,20 +48,24 @@ const CheckoutPage = () => {
       [name]: value,
     });
   };
-    // Handle delivery method change
+  // Handle delivery method change
   const handleDeliveryChange = (e) => {
     setDeliveryMethod(e.target.value);
   };
 
   useEffect(() => {
-    if (deliveryMethod === 'inside-dhaka') {
+    if (deliveryMethod === "inside-dhaka") {
       setDeliveryFee(60);
     } else {
       setDeliveryFee(120);
     }
-  }, [deliveryMethod])
-  
+  }, [deliveryMethod]);
+    const totalAmount = all_product
+    .filter((product) => cartItems[product.id])
+    .reduce((sum, item) => sum + item.new_price * cartItems[item.id], 0);
+  // console.log(totalAmount);
 
+  const totalAmountWithDelivery = totalAmount + deliveryFee;
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -59,12 +77,13 @@ const CheckoutPage = () => {
       userId: isAuthenticated ? user._id : null,
     });
 
+
     if (response?.success) {
       SweetAlert({
         icon: "success",
         title: response.message,
       });
-      navigate("/checkout/manual-payment");
+      navigate(`/checkout/manual-payment/${totalAmountWithDelivery}`);
     } else {
       SweetAlert({
         icon: "error",
@@ -73,10 +92,7 @@ const CheckoutPage = () => {
     }
   };
 
-  const totalAmount = all_product
-    .filter((product) => cartItems[product.id])
-    .reduce((sum, item) => sum + item.new_price * cartItems[item.id], 0);
-  // console.log(totalAmount);
+
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -238,7 +254,7 @@ const CheckoutPage = () => {
                     htmlFor="inside-dhaka"
                     className="ml-3 block text-sm font-medium text-gray-700"
                   >
-                    Inside Dhaka - 60₹
+                    Inside Dhaka - 60$
                   </label>
                 </div>
 
@@ -256,7 +272,7 @@ const CheckoutPage = () => {
                     htmlFor="outside-dhaka"
                     className="ml-3 block text-sm font-medium text-gray-700"
                   >
-                    Outside Dhaka - 120₹
+                    Outside Dhaka - 120$
                   </label>
                 </div>
               </div>
@@ -320,7 +336,10 @@ const CheckoutPage = () => {
                   </tbody>
                   <tfoot>
                     <tr>
-                      <td colSpan="3" className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                      <td
+                        colSpan="3"
+                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right"
+                      >
                         Delivery Fee:
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -335,7 +354,7 @@ const CheckoutPage = () => {
                         Total:
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        {deliveryFee+ totalAmount}$
+                        {deliveryFee + totalAmount}$
                       </td>
                     </tr>
                   </tfoot>
