@@ -3,9 +3,11 @@ import { useContext, useEffect, useState } from "react";
 import { FrontendAuthContext } from "../context/FrontendAuthContext";
 import { ManualPaymentService } from "../service/Payment";
 import SweetAlert from "../components/common/SweetAlert";
+import { ShopContext } from "../context/ShopContest";
 
 export default function ManualPayment() {
   const { user, isAuthenticated } = useContext(FrontendAuthContext);
+  const { clearCart } = useContext(ShopContext);
 
   const products = JSON.parse(localStorage.getItem("cart_v1")) || [];
 
@@ -33,6 +35,7 @@ export default function ManualPayment() {
           icon: "success",
           title: response.message,
         });
+        clearCart();
       } else {
         SweetAlert({
           icon: "error",
