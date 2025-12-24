@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react";
+import { use, useContext, useEffect, useState } from "react";
 
 import { FrontendAuthContext } from "../context/FrontendAuthContext";
 import { ManualPaymentService } from "../service/Payment";
 import SweetAlert from "../components/common/SweetAlert";
-import { ShopContext } from "../context/ShopContest";
 
 export default function ManualPayment() {
+  const { amount:payAmount } = useParams();
+  const navigate = useNavigate();
   const { user, isAuthenticated } = useContext(FrontendAuthContext);
-  const { clearCart } = useContext(ShopContext);
 
   const products = JSON.parse(localStorage.getItem("cart_v1")) || [];
 
@@ -35,7 +35,6 @@ export default function ManualPayment() {
           icon: "success",
           title: response.message,
         });
-        clearCart();
       } else {
         SweetAlert({
           icon: "error",
@@ -51,49 +50,52 @@ export default function ManualPayment() {
   };
 
   return (
-    <div className="p-10 max-w-md mx-auto bg-white shadow rounded">
-      <h2 className="text-xl font-bold mb-4">Manual Payment</h2>
+    <div className="my-12">
+      <div className="max-w-md mx-auto bg-white "></div>
+      <div className="p-10 max-w-md mx-auto bg-white shadow-lg rounded">
+        <h2 className=" text-center mb-0">Manual Payment</h2>
+        <h2 className="text-center mt-0 text-lg text-rose-600">Payment Now {payAmount}$</h2>
+        <select
+          className="border p-2 w-full"
+          onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
+        >
+          <option value="bkash">bKash</option>
+          <option value="nagad">Nagad</option>
+          <option value="rocket">Rocket</option>
+        </select>
 
-      <select
-        className="border p-2 w-full"
-        onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
-      >
-        <option value="bkash">bKash</option>
-        <option value="nagad">Nagad</option>
-        <option value="rocket">Rocket</option>
-      </select>
+        <input
+          type="tel"
+          className="border p-2 w-full mt-2"
+          placeholder="Your Phone Number"
+          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+          required
+        />
 
-      <input
-        type="tel"
-        className="border p-2 w-full mt-2"
-        placeholder="Your Phone Number"
-        onChange={(e) => setForm({ ...form, phone: e.target.value })}
-        required
-      />
+        <input
+          type="text"
+          className="border p-2 w-full mt-2"
+          placeholder="Transaction ID"
+          onChange={(e) => setForm({ ...form, trxId: e.target.value })}
+          required
+        />
 
-      <input
-        type="text"
-        className="border p-2 w-full mt-2"
-        placeholder="Transaction ID"
-        onChange={(e) => setForm({ ...form, trxId: e.target.value })}
-        required
-      />
+        <input
+          type="number"
+          name="amount"
+          className="border p-2 w-full mt-2"
+          placeholder="Amount"
+          onChange={(e) => setForm({ ...form, amount: e.target.value })}
+          required
+        />
 
-      <input
-        type="number"
-        name="Amount"
-        className="border p-2 w-full mt-2"
-        placeholder="Amount"
-        onChange={(e) => setForm({ ...form, amount: e.target.value })}
-        required
-      />
-
-      <button
-        className="bg-green-600 text-white px-4 py-2 mt-4 w-full"
-        onClick={submitPayment}
-      >
-        Submit Payment
-      </button>
+        <button
+          className="bg-green-600 text-white px-4 py-2 mt-4 w-full"
+          onClick={submitPayment}
+        >
+          Submit Payment
+        </button>
+      </div>
     </div>
   );
 }
