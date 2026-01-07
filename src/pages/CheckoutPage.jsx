@@ -8,14 +8,11 @@ import SweetAlert from "../components/common/SweetAlert";
 const CheckoutPage = () => {
   const { cartItems, products: all_product } = useContext(ShopContext);
   const { user, isAuthenticated } = useContext(FrontendAuthContext);
-  const [deliveryFee, setDeliveryFee] = useState(60);
- 
-
-  // State for delivery method
-  const [deliveryMethod, setDeliveryMethod] = useState("inside-dhaka");
-
   const navigate = useNavigate();
-  // State for customer information
+
+  const [deliveryFee, setDeliveryFee] = useState(0);
+
+  // Customer info state
   const [customerInfo, setCustomerInfo] = useState({
     fullName: "",
     phone: "",
@@ -24,59 +21,78 @@ const CheckoutPage = () => {
     state: "",
     city: "",
     postalCode: "",
-    deliveryMethod,
+    deliveryMethod: "inside-dhaka",
   });
 
+  // Load user address
   useEffect(() => {
-    setCustomerInfo({
-      fullName: user?.addresses[0]?.fullName,
-      phone: user?.addresses[0]?.phone,
-      email: user?.addresses[0]?.email,
-      address: user?.addresses[0]?.address,
-      state: user?.addresses[0]?.state,
-      city: user?.addresses[0]?.city,
-      postalCode: user?.addresses[0]?.postalCode,
-      deliveryMethod: user?.addresses[0]?.deliveryMethod || "inside-dhaka",
-    });
-  }, [isAuthenticated?.isAuth, user?.addresses]);
+    if (user?.addresses?.length) {
+      setCustomerInfo({
+        fullName: user.addresses[0]?.fullName || "",
+        phone: user.addresses[0]?.phone || "",
+        email: user.addresses[0]?.email || "",
+        address: user.addresses[0]?.address || "",
+        state: user.addresses[0]?.state || "",
+        city: user.addresses[0]?.city || "",
+        postalCode: user.addresses[0]?.postalCode || "",
+        deliveryMethod:
+          user.addresses[0]?.deliveryMethod || "inside-dhaka",
+      });
+    }
+  }, [user, isAuthenticated?.isAuth]);
 
-  // Handle input changes
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setCustomerInfo({
-      ...customerInfo,
-      [name]: value,
-    });
-  };
-  // Handle delivery method change
-  const handleDeliveryChange = (e) => {
-    setDeliveryMethod(e.target.value);
-  };
-
+  // Delivery fee calculation
   useEffect(() => {
-    if (deliveryMethod === "inside-dhaka") {
+    if (customerInfo.deliveryMethod === "inside-dhaka") {
       setDeliveryFee(60);
-    } else {
+    } else if (customerInfo.deliveryMethod === "outside-dhaka") {
       setDeliveryFee(120);
     }
-  }, [deliveryMethod]);
-    const totalAmount = all_product
+  }, [customerInfo.deliveryMethod]);
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCustomerInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle delivery method change
+  const handleDeliveryChange = (e) => {
+    setCustomerInfo((prev) => ({
+      ...prev,
+      deliveryMethod: e.target.value,
+    }));
+  };
+
+  // Calculate total
+  const totalAmount = all_product
     .filter((product) => cartItems[product.id])
-    .reduce((sum, item) => sum + item.new_price * cartItems[item.id], 0);
-  // console.log(totalAmount);
+    .reduce(
+      (sum, item) => sum + item.new_price * cartItems[item.id],
+      0
+    );
 
   const totalAmountWithDelivery = totalAmount + deliveryFee;
 
-  // Handle form submission
+  // Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Process the order here
-    let response = await updateUserInfo({
+
+    if (!customerInfo.deliveryMethod) {
+      return SweetAlert({
+        icon: "error",
+        title: "Please select delivery method",
+      });
+    }
+
+    const response = await updateUserInfo({
       formData: customerInfo,
       token: isAuthenticated ? user.token : null,
       userId: isAuthenticated ? user._id : null,
     });
-
 
     if (response?.success) {
       SweetAlert({
@@ -92,285 +108,109 @@ const CheckoutPage = () => {
     }
   };
 
-
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md">
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-6">Checkout</h1>
+          <h1 className="text-2xl font-bold mb-6">Checkout</h1>
 
           <form onSubmit={handleSubmit}>
-            {/* Customer Information Section */}
+            {/* Customer Info */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">
                 Customer Information
               </h2>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="fullName"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Full Name
-                  </label>
+                {[
+                  "fullName",
+                  "phone",
+                  "email",
+                  "city",
+                  "state",
+                  "postalCode",
+                ].map((field) => (
                   <input
+                    key={field}
                     type="text"
-                    id="fullName"
-                    name="fullName"
-                    value={customerInfo.fullName}
+                    name={field}
+                    value={customerInfo[field]}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder={field}
+                    className="border px-3 py-2 rounded-md"
                     required
                   />
-                </div>
+                ))}
 
-                <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Phone Number
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    value={customerInfo.phone}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={customerInfo.email}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="city"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    City
-                  </label>
-                  <input
-                    type="text"
-                    id="city"
-                    name="city"
-                    value={customerInfo.city}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="state"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    State
-                  </label>
-                  <input
-                    type="text"
-                    id="state"
-                    name="state"
-                    value={customerInfo.state}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="postalCode"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Postal Code
-                  </label>
-                  <input
-                    type="number"
-                    id="postalCode"
-                    name="postalCode"
-                    value={customerInfo.postalCode}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label
-                    htmlFor="address"
-                    className="block text-sm font-medium text-gray-700 mb-1"
-                  >
-                    Address
-                  </label>
-                  <textarea
-                    id="address"
-                    name="address"
-                    value={customerInfo.address}
-                    onChange={handleInputChange}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    required
-                  ></textarea>
-                </div>
+                <textarea
+                  name="address"
+                  value={customerInfo.address}
+                  onChange={handleInputChange}
+                  rows={3}
+                  className="border px-3 py-2 rounded-md md:col-span-2"
+                  placeholder="Address"
+                  required
+                />
               </div>
             </div>
-            {/* Delivery Method Section */}
+
+            {/* Delivery Method */}
             <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b">
+              <h2 className="text-xl font-semibold mb-4 border-b pb-2">
                 Delivery Method
               </h2>
 
               <div className="space-y-3">
-                <div className="flex items-center">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
-                    id="inside-dhaka"
-                    name="deliveryMethod"
                     value="inside-dhaka"
-                    checked={deliveryMethod === "inside-dhaka"}
+                    checked={
+                      customerInfo.deliveryMethod === "inside-dhaka"
+                    }
                     onChange={handleDeliveryChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                    className="cursor-pointer"
                   />
-                  <label
-                    htmlFor="inside-dhaka"
-                    className="ml-3 block text-sm font-medium text-gray-700"
-                  >
-                    Inside Dhaka - 60$
-                  </label>
-                </div>
+                  Inside Dhaka - 60$
+                </label>
 
-                <div className="flex items-center">
+                <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
-                    id="outside-dhaka"
-                    name="deliveryMethod"
                     value="outside-dhaka"
-                    checked={deliveryMethod === "outside-dhaka"}
+                    checked={
+                      customerInfo.deliveryMethod === "outside-dhaka"
+                    }
                     onChange={handleDeliveryChange}
-                    className="h-4 w-4 text-blue-600 focus:ring-blue-500"
+                   className="cursor-pointer"
                   />
-                  <label
-                    htmlFor="outside-dhaka"
-                    className="ml-3 block text-sm font-medium text-gray-700"
-                  >
-                    Outside Dhaka - 120$
-                  </label>
+                  Outside Dhaka - 120$
+                </label>
+              </div>
+            </div>
+
+              {/* Price Breakdown */}
+              <div className="space-y-3 mb-6 pt-6 border-t border-gray-200">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span className="font-medium">${totalAmount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Delivery Fee</span>
+                  <span className="font-medium">${deliveryFee.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-lg font-bold pt-4 border-t border-gray-200">
+                  <span>Total</span>
+                  <span>${totalAmountWithDelivery.toFixed(2)}</span>
                 </div>
               </div>
-            </div>
 
-            {/* Order Overview Section */}
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b">
-                Order Overview
-              </h2>
-
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Product
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Price
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Quantity
-                      </th>
-                      <th
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                      >
-                        Subtotal
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {all_product
-                      .filter((product) => cartItems[product.id])
-                      .map((product) => (
-                        <tr key={product.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {product.name}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            ${product.new_price}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {cartItems[product.id]}
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            ${product.new_price * cartItems[product.id]}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td
-                        colSpan="3"
-                        className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right"
-                      >
-                        Delivery Fee:
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {deliveryFee}$
-                      </td>
-                    </tr>
-                    <tr>
-                      <td
-                        colSpan="3"
-                        className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 text-right"
-                      >
-                        Total:
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">
-                        {deliveryFee + totalAmount}$
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                className="px-6 py-3 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                PAYMENT NOW
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="w-full bg-red-600 text-white py-3 rounded-md hover:bg-red-700"
+            >
+              PAYMENT NOW
+            </button>
           </form>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import Axios from "../service/Axios";
+import SweetAlert from "../components/common/SweetAlert";
 
 export const FrontendAuthContext = createContext();
 const FrontendAuthContextProvider = ({ children }) => {
@@ -9,29 +10,40 @@ const FrontendAuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const fetchAuthUser = async () => {
-      if (token) {
-        const response = await Axios.get("/auth/check-auth", {
-          headers: {
-            Authorization: `EcomToken ${token}`,
-          },
-        });
-
-        if (response.data) {
-          setUser(response.data?.data);
-          setIsAuthenticated({
-            isAuth: true,
-            token,
+      try {
+        if (token) {
+          const response = await Axios.get("/auth/check-auth", {
+            headers: {
+              Authorization: `EcomToken ${token}`,
+            },
           });
+          console.log("response", response);
+
+          if (response?.data) {
+            setUser(response?.data?.data);
+            setIsAuthenticated({
+              isAuth: true,
+              token,
+            });
+          }
+        } else {
+          setUser(null);
+          setIsAuthenticated(false);
+          localStorage.removeItem("usertoken");
         }
-        
-      } else {
+      } catch (error) {
+        console.log(error);
         setUser(null);
         setIsAuthenticated(false);
         localStorage.removeItem("usertoken");
+        SweetAlert({
+          icon: "error",
+          title: error?.response?.data?.message,
+        });
       }
     };
     fetchAuthUser();
-  }, [isAuthenticated.isAuth]);
+  }, [isAuthenticated?.isAuth]);
 
   const logout = () => {
     setUser(null);

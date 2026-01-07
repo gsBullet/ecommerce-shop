@@ -74,7 +74,7 @@ export default function ManualPayment() {
         <input
           type="tel"
           className="border p-2 w-full mt-2"
-          placeholder="Your Phone Number"
+          placeholder="+8801XXXXXXXXX"
           onChange={(e) => setForm({ ...form, phone: e.target.value })}
           required
         />
