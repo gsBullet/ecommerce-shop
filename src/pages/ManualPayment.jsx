@@ -1,13 +1,16 @@
-import { use, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { FrontendAuthContext } from "../context/FrontendAuthContext";
 import { ManualPaymentService } from "../service/Payment";
 import SweetAlert from "../components/common/SweetAlert";
+import { ShopContext } from "../context/ShopContest";
 
 export default function ManualPayment() {
-  const { amount:payAmount } = useParams();
+  const { amount: payAmount } = useParams();
   const navigate = useNavigate();
   const { user, isAuthenticated } = useContext(FrontendAuthContext);
+  const { clearCart } = useContext(ShopContext);
 
   const products = JSON.parse(localStorage.getItem("cart_v1")) || [];
 
@@ -35,6 +38,8 @@ export default function ManualPayment() {
           icon: "success",
           title: response.message,
         });
+        clearCart();
+        navigate("/");
       } else {
         SweetAlert({
           icon: "error",
@@ -54,7 +59,9 @@ export default function ManualPayment() {
       <div className="max-w-md mx-auto bg-white "></div>
       <div className="p-10 max-w-md mx-auto bg-white shadow-lg rounded">
         <h2 className=" text-center mb-0">Manual Payment</h2>
-        <h2 className="text-center mt-0 text-lg text-rose-600">Payment Now {payAmount}$</h2>
+        <h2 className="text-center mt-0 text-lg text-rose-600">
+          Payment Now {payAmount}$
+        </h2>
         <select
           className="border p-2 w-full"
           onChange={(e) => setForm({ ...form, paymentMethod: e.target.value })}
