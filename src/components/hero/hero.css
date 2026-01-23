@@ -1,5 +1,5 @@
 .hero {
-  height: 100vh;
+  height: 80vh;
   background: linear-gradient(180deg, #fde1ff, #e1ffea22 60%);
   display: flex;
 }
@@ -112,8 +112,7 @@
 
 @media(max-width:500px){
     .hero{
-        flex-direction: column;
-        
+        flex-direction: column; 
     }
     .hero-right{
         display: none;

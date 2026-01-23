@@ -17,7 +17,7 @@ const CartItems = () => {
   } = useContext(ShopContext);
   const navigate = useNavigate();
 
-  console.log(getTotalItems());
+
 
   return (
     <div className="cartitems">

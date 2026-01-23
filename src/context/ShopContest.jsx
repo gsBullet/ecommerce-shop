@@ -7,6 +7,8 @@ const CART_STORAGE_KEY = "cart_v1";
 
 const ShopContextProvider = ({ children }) => {
   const [products, setProducts] = useState([]);
+  // console.log(products);
+  
   const [cartItems, setCartItems] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || {};

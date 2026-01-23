@@ -7,6 +7,7 @@
 .item-prices {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 .item-price-new {
   color: #374151;

@@ -3,7 +3,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  height: 90vh;
+  height: 75vh;
 }
 .popular h1 {
   color: #171717;
@@ -74,7 +74,8 @@
 }
 @media (max-width: 500px) {
   .popular {
-    height: 90vh;
+    height: 40vh;
+    border: 1px solid red;
   }
  
   .popular-items {
