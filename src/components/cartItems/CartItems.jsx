@@ -16,14 +16,14 @@ const CartItems = () => {
     getTotalItems,
   } = useContext(ShopContext);
   const navigate = useNavigate();
-
-
+  // console.log(cartItems);
 
   return (
     <div className="cartitems">
       <div className="cartitems-format-main">
         <p>Products</p>
         <p>Title</p>
+        <p>Size</p>
         <p>Price</p>
         <p>Quantity</p>
         <p>Total</p>
@@ -32,42 +32,54 @@ const CartItems = () => {
 
       <hr />
 
-      {all_product?.map(
-        (product) =>
-          cartItems[product.id] > 0 && (
-            <div key={product.id}>
-              <div className="cartitems-format cartitems-format-main ">
-                <img
-                  src={BASE_URL + product.thumbnail}
-                  alt={product.name}
-                  className="carticon-product-icon"
-                />
-                <p>{product.name}</p>
-                <p>${product.new_price}</p>
-                <button
-                  onClick={() => addToCart(product.id)}
-                  className="cartItems-quantity"
-                >
-                  {cartItems[product.id]}
-                </button>
-                <p>${product.new_price * cartItems[product.id]}</p>
-                <img
-                  src={remove_icon}
-                  alt=""
-                  className="cartitems-remove-item"
-                  onClick={() => removeFromCart(product.id)}
-                />
-              </div>
-              <hr />
+      {Object.entries(cartItems).map(([cartKey, item]) => {
+        const product = all_product.find((p) => p.id === item.productId);
+
+        if (!product) return null;
+
+        return (
+          <div key={cartKey}>
+            <div className="cartitems-format cartitems-format-main">
+              <img
+                src={BASE_URL + product.thumbnail}
+                alt={product.name}
+                className="carticon-product-icon"
+              />
+
+              <p>{product.name}</p>
+
+              {/* ✅ SIZE */}
+              <p>{item.size}</p>
+
+              <p>${product.new_price}</p>
+
+              {/* ✅ QUANTITY */}
+              <button
+                onClick={() => addToCart(item.productId, item.size)}
+                className="cartItems-quantity"
+              >
+                {item.quantity}
+              </button>
+
+              {/* ✅ SUBTOTAL */}
+              <p>${product.new_price * item.quantity}</p>
+
+              {/* ✅ REMOVE */}
+              <img
+                src={remove_icon}
+                alt=""
+                className="cartitems-remove-item"
+                onClick={() => removeFromCart(product.id)}
+              />
             </div>
-          )
-      )}
+            <hr />
+          </div>
+        );
+      })}
 
       <div className="cartitems-down">
         <div className="cartitems-total">
           <div>
-           
-
             <hr />
             <div className="cartitems-total-item">
               <h3>Total</h3>

@@ -1,4 +1,9 @@
-import React, { createContext, useEffect, useState, useCallback } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import Axios from "../service/Axios";
 
 export const ShopContext = createContext(null);
@@ -6,9 +11,9 @@ export const ShopContext = createContext(null);
 const CART_STORAGE_KEY = "cart_v1";
 
 const ShopContextProvider = ({ children }) => {
+  /* ---------------- STATES ---------------- */
   const [products, setProducts] = useState([]);
-  // console.log(products);
-  
+
   const [cartItems, setCartItems] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || {};
@@ -33,45 +38,69 @@ const ShopContextProvider = ({ children }) => {
 
   /* ---------------- PERSIST CART ---------------- */
   useEffect(() => {
-    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+    localStorage.setItem(
+      CART_STORAGE_KEY,
+      JSON.stringify(cartItems)
+    );
   }, [cartItems]);
 
   /* ---------------- CART ACTIONS ---------------- */
-  const addToCart = useCallback((productId) => {
+
+  // ✅ ADD TO CART (size-aware)
+  const addToCart = useCallback((productId, selectedSize) => {
+    const cartKey = `${productId}_${selectedSize}`;
+
     setCartItems((prev) => ({
       ...prev,
-      [productId]: (prev[productId] || 0) + 1,
+      [cartKey]: {
+        productId,
+        size: selectedSize,
+        quantity: (prev[cartKey]?.quantity || 0) + 1,
+      },
     }));
   }, []);
 
-  const removeFromCart = useCallback((productId) => {
+  // ✅ REMOVE FROM CART
+  const removeFromCart = useCallback((cartKey) => {
     setCartItems((prev) => {
-      if (!prev[productId]) return prev;
+      if (!prev[cartKey]) return prev;
 
       const updated = { ...prev };
 
-      if (updated[productId] === 1) {
-        delete updated[productId]; // 🔥 remove zero values
+      if (updated[cartKey].quantity === 1) {
+        delete updated[cartKey];
       } else {
-        updated[productId]--;
+        updated[cartKey].quantity -= 1;
       }
 
       return updated;
     });
   }, []);
 
+  // ✅ CLEAR CART
   const clearCart = () => setCartItems({});
 
   /* ---------------- CART HELPERS ---------------- */
-  const getTotalItems = () =>
-    Object.values(cartItems).reduce((a, b) => a + b, 0);
 
+  // total item count
+  const getTotalItems = () =>
+    Object.values(cartItems).reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+
+  // total price
   const getTotalAmount = () =>
-    Object.entries(cartItems).reduce((total, [id, qty]) => {
-      const product = products.find((p) => p.id === id);
-      return product ? total + product.new_price * qty : total;
+    Object.values(cartItems).reduce((total, item) => {
+      const product = products.find(
+        (p) => p.id === item.productId
+      );
+
+      return product
+        ? total + product.new_price * item.quantity
+        : total;
     }, 0);
-  
+
   /* ---------------- CONTEXT ---------------- */
   return (
     <ShopContext.Provider
@@ -83,7 +112,7 @@ const ShopContextProvider = ({ children }) => {
         clearCart,
         getTotalItems,
         getTotalAmount,
-        fetchProducts
+        fetchProducts,
       }}
     >
       {children}

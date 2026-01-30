@@ -25,7 +25,7 @@ const ProductDisplay = (props) => {
         icon: "warning",
       });
     } else {
-      addToCart(productId);
+      addToCart(productId, selectedSize);
       setIsAdded(true);
       SweetAlert({
         title: "Product Added Successfully",

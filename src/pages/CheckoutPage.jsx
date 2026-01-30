@@ -35,8 +35,7 @@ const CheckoutPage = () => {
         state: user.addresses[0]?.state || "",
         city: user.addresses[0]?.city || "",
         postalCode: user.addresses[0]?.postalCode || "",
-        deliveryMethod:
-          user.addresses[0]?.deliveryMethod || "inside-dhaka",
+        deliveryMethod: user.addresses[0]?.deliveryMethod || "inside-dhaka",
       });
     }
   }, [user, isAuthenticated?.isAuth]);
@@ -67,13 +66,14 @@ const CheckoutPage = () => {
     }));
   };
 
-  // Calculate total
-  const totalAmount = all_product
-    .filter((product) => cartItems[product.id])
-    .reduce(
-      (sum, item) => sum + item.new_price * cartItems[item.id],
-      0
-    );
+  // CALCULATION OF TOTAL AMOUNT
+  const totalAmount = Object.values(cartItems).reduce((sum, cartItem) => {
+    const product = all_product.find((p) => p.id === cartItem.productId);
+
+    if (!product) return sum;
+
+    return sum + product.new_price * cartItem.quantity;
+  }, 0);
 
   const totalAmountWithDelivery = totalAmount + deliveryFee;
 
@@ -165,9 +165,7 @@ const CheckoutPage = () => {
                   <input
                     type="radio"
                     value="inside-dhaka"
-                    checked={
-                      customerInfo.deliveryMethod === "inside-dhaka"
-                    }
+                    checked={customerInfo.deliveryMethod === "inside-dhaka"}
                     onChange={handleDeliveryChange}
                     className="cursor-pointer"
                   />
@@ -178,32 +176,30 @@ const CheckoutPage = () => {
                   <input
                     type="radio"
                     value="outside-dhaka"
-                    checked={
-                      customerInfo.deliveryMethod === "outside-dhaka"
-                    }
+                    checked={customerInfo.deliveryMethod === "outside-dhaka"}
                     onChange={handleDeliveryChange}
-                   className="cursor-pointer"
+                    className="cursor-pointer"
                   />
                   Outside Dhaka - 120$
                 </label>
               </div>
             </div>
 
-              {/* Price Breakdown */}
-              <div className="space-y-3 mb-6 pt-6 border-t border-gray-200">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-medium">${totalAmount.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Delivery Fee</span>
-                  <span className="font-medium">${deliveryFee.toFixed(2)}</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold pt-4 border-t border-gray-200">
-                  <span>Total</span>
-                  <span>${totalAmountWithDelivery.toFixed(2)}</span>
-                </div>
+            {/* Price Breakdown */}
+            <div className="space-y-3 mb-6 pt-6 border-t border-gray-200">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Subtotal</span>
+                <span className="font-medium">${totalAmount.toFixed(2)}</span>
               </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Delivery Fee</span>
+                <span className="font-medium">${deliveryFee.toFixed(2)}</span>
+              </div>
+              <div className="flex justify-between text-lg font-bold pt-4 border-t border-gray-200">
+                <span>Total</span>
+                <span>${totalAmountWithDelivery.toFixed(2)}</span>
+              </div>
+            </div>
 
             <button
               type="submit"

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContest";
 import {
   ChevronDown,
@@ -13,13 +14,24 @@ import {
   MessageSquare,
   Package,
 } from "lucide-react";
+// import SweetAlert from "../components/common/SweetAlert";
 
 const BASE_URL = "http://localhost:9000/";
 
 const ShopCategory = (props) => {
-  const { products: all_product } = useContext(ShopContext);
+  // const navigate = useNavigate();
+  const { products: all_product,  } = useContext(ShopContext);
+
   const [sortOption, setSortOption] = useState("featured");
   const [showSortMenu, setShowSortMenu] = useState(false);
+
+  // const handleAddToCart = async (product) => {
+  //   await addToCart(product.id);
+  //   SweetAlert({
+  //     title: "Product Added Successfully",
+  //     icon: "success",
+  //   });
+  // };
 
   const filteredProducts =
     all_product?.filter(
@@ -40,9 +52,8 @@ const ShopCategory = (props) => {
       {/* Hero Banner with Parallax Effect */}
       <div className="relative h-[400px] overflow-hidden border container mx-auto mb-16">
         {/* <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-purple-600" /> */}
-        <div className="absolute inset-0 opacity-30">
-        </div>
-        
+        <div className="absolute inset-0 opacity-30"></div>
+
         <img
           className="absolute inset-0 w-full h-full object-fit mx-auto container mix-blend-overlay shadow-xl"
           src={props.banner}
@@ -55,7 +66,9 @@ const ShopCategory = (props) => {
             <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-500 to-orange-400  rounded-full" />
             <div className="relative inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl">
               <Sparkles className="w-5 h-5 animate-pulse" />
-              <span className="text-sm font-semibold tracking-wide">PREMIUM COLLECTION 2024</span>
+              <span className="text-sm font-semibold tracking-wide">
+                PREMIUM COLLECTION 2024
+              </span>
             </div>
           </div>
 
@@ -74,63 +87,71 @@ const ShopCategory = (props) => {
           </p>
 
           {/* Stats */}
-         <div className="flex items-center justify-center gap-6 mt-6">
-      {/* Products Stat */}
-      <div className="group relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
-        <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center min-w-[120px] hover:scale-105 transition-transform">
-          <div className="flex justify-center mb-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center">
-              <Package className="w-5 h-5 text-white" />
+          <div className="flex items-center justify-center gap-6 mt-6">
+            {/* Products Stat */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
+              <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center min-w-[120px] hover:scale-105 transition-transform">
+                <div className="flex justify-center mb-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center">
+                    <Package className="w-5 h-5 text-white" />
+                  </div>
+                </div>
+                <div className="text-3xl font-black text-white mb-1">
+                  {totalProducts}+
+                </div>
+                <div className="text-xs font-semibold text-white/80 uppercase tracking-wide">
+                  Products
+                </div>
+              </div>
+            </div>
+
+            {/* Decorative Divider */}
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-1 h-1 rounded-full bg-white/40" />
+              <div className="w-1 h-1 rounded-full bg-white/60" />
+              <div className="w-1 h-1 rounded-full bg-white/40" />
+            </div>
+
+            {/* Rating Stat */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
+              <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center min-w-[120px] hover:scale-105 transition-transform">
+                <div className="flex justify-center mb-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center">
+                    <Star className="w-5 h-5 text-white fill-white" />
+                  </div>
+                </div>
+                <div className="text-3xl font-black text-white mb-1">4.9★</div>
+                <div className="text-xs font-semibold text-white/80 uppercase tracking-wide">
+                  Rating
+                </div>
+              </div>
+            </div>
+
+            {/* Decorative Divider */}
+            <div className="flex flex-col items-center gap-1">
+              <div className="w-1 h-1 rounded-full bg-white/40" />
+              <div className="w-1 h-1 rounded-full bg-white/60" />
+              <div className="w-1 h-1 rounded-full bg-white/40" />
+            </div>
+
+            {/* Reviews Stat */}
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-400 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
+              <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center min-w-[120px] hover:scale-105 transition-transform">
+                <div className="flex justify-center mb-2">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-400 flex items-center justify-center">
+                    <MessageSquare className="w-5 h-5 text-white" />
+                  </div>
+                </div>
+                <div className="text-3xl font-black text-white mb-1">2.5k+</div>
+                <div className="text-xs font-semibold text-white/80 uppercase tracking-wide">
+                  Reviews
+                </div>
+              </div>
             </div>
           </div>
-          <div className="text-3xl font-black text-white mb-1">{totalProducts}+</div>
-          <div className="text-xs font-semibold text-white/80 uppercase tracking-wide">Products</div>
-        </div>
-      </div>
-
-      {/* Decorative Divider */}
-      <div className="flex flex-col items-center gap-1">
-        <div className="w-1 h-1 rounded-full bg-white/40" />
-        <div className="w-1 h-1 rounded-full bg-white/60" />
-        <div className="w-1 h-1 rounded-full bg-white/40" />
-      </div>
-
-      {/* Rating Stat */}
-      <div className="group relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
-        <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center min-w-[120px] hover:scale-105 transition-transform">
-          <div className="flex justify-center mb-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 flex items-center justify-center">
-              <Star className="w-5 h-5 text-white fill-white" />
-            </div>
-          </div>
-          <div className="text-3xl font-black text-white mb-1">4.9★</div>
-          <div className="text-xs font-semibold text-white/80 uppercase tracking-wide">Rating</div>
-        </div>
-      </div>
-
-      {/* Decorative Divider */}
-      <div className="flex flex-col items-center gap-1">
-        <div className="w-1 h-1 rounded-full bg-white/40" />
-        <div className="w-1 h-1 rounded-full bg-white/60" />
-        <div className="w-1 h-1 rounded-full bg-white/40" />
-      </div>
-
-      {/* Reviews Stat */}
-      <div className="group relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-400 to-purple-400 rounded-2xl blur-lg opacity-60 group-hover:opacity-80 transition-opacity" />
-        <div className="relative bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4 text-center min-w-[120px] hover:scale-105 transition-transform">
-          <div className="flex justify-center mb-2">
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400 to-purple-400 flex items-center justify-center">
-              <MessageSquare className="w-5 h-5 text-white" />
-            </div>
-          </div>
-          <div className="text-3xl font-black text-white mb-1">2.5k+</div>
-          <div className="text-xs font-semibold text-white/80 uppercase tracking-wide">Reviews</div>
-        </div>
-      </div>
-    </div>
         </div>
 
         {/* Wave Divider */}
@@ -151,7 +172,9 @@ const ShopCategory = (props) => {
                 <TrendingUp className="w-6 h-6 text-white" />
               </div>
               <div>
-                <p className="text-sm text-gray-500 font-medium">AVAILABLE NOW</p>
+                <p className="text-sm text-gray-500 font-medium">
+                  AVAILABLE NOW
+                </p>
                 <p className="text-lg font-bold text-gray-900">
                   {displayedProducts.length} of {totalProducts} Products
                 </p>
@@ -190,7 +213,13 @@ const ShopCategory = (props) => {
 
                 {showSortMenu && (
                   <div className="absolute right-0 mt-3 w-64 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-50 overflow-hidden">
-                    {["Featured", "Price: Low to High", "Price: High to Low", "Newest", "Best Sellers"].map((option, idx) => (
+                    {[
+                      "Featured",
+                      "Price: Low to High",
+                      "Price: High to Low",
+                      "Newest",
+                      "Best Sellers",
+                    ].map((option, idx) => (
                       <button
                         key={option}
                         onClick={() => {
@@ -199,7 +228,9 @@ const ShopCategory = (props) => {
                         }}
                         className="w-full text-left px-5 py-3 hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 text-gray-700 hover:text-purple-600 transition-all font-medium flex items-center gap-3 group"
                       >
-                        <div className={`w-2 h-2 rounded-full ${sortOption === option.toLowerCase() ? 'bg-purple-600' : 'bg-gray-300'} group-hover:bg-purple-600`} />
+                        <div
+                          className={`w-2 h-2 rounded-full ${sortOption === option.toLowerCase() ? "bg-purple-600" : "bg-gray-300"} group-hover:bg-purple-600`}
+                        />
                         {option}
                       </button>
                     ))}
@@ -211,7 +242,7 @@ const ShopCategory = (props) => {
         </div>
 
         {/* Products Grid - Enhanced */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 mb-16 ">
           {displayedProducts.map((product, index) => (
             <div
               key={product.id}
@@ -240,7 +271,12 @@ const ShopCategory = (props) => {
                         <div className="absolute inset-0 bg-red-500 blur-lg opacity-50" />
                         <div className="relative bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-xl flex items-center gap-1">
                           <Sparkles className="w-4 h-4" />
-                          {Math.round(((product.old_price - product.new_price) / product.old_price) * 100)}% OFF
+                          {Math.round(
+                            ((product.old_price - product.new_price) /
+                              product.old_price) *
+                              100,
+                          )}
+                          % OFF
                         </div>
                       </div>
                     </div>
@@ -253,20 +289,30 @@ const ShopCategory = (props) => {
 
                   {/* Quick Action Buttons */}
                   <div className="absolute bottom-4 left-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-700">
-                    <button className="flex-1 bg-white/95 backdrop-blur-sm text-gray-900 py-3 rounded-xl font-bold hover:bg-purple-600 hover:text-white transition-colors shadow-xl flex items-center justify-center gap-2">
-                      <ShoppingCart className="w-4 h-4" />
-                      Add
+                    <button
+                      className="flex-1 bg-white/95 backdrop-blur-sm text-gray-900 py-3 rounded-xl font-bold hover:bg-purple-600 hover:text-white transition-colors shadow-xl flex items-center justify-center gap-2"
+                     
+                    >
+                      {/* <ShoppingCart className="w-4 h-4" /> */}
+                      <Link to={`/product/${product.id}`} className="w-full h-full flex items-center justify-center">
+                      View 
+                     </Link>  
                     </button>
-                    <button className="px-4 bg-white/95 backdrop-blur-sm text-gray-900 rounded-xl font-bold hover:bg-pink-600 hover:text-white transition-colors shadow-xl">
-                      View
-                    </button>
+                    {/* <button
+                      className="px-4 bg-white/95 backdrop-blur-sm text-gray-900 rounded-xl font-bold hover:bg-pink-600 hover:text-white transition-colors shadow-xl"
+                     
+                    >
+                     
+                    </button> */}
                   </div>
 
                   {/* Rating Badge */}
                   <div className="absolute top-4 right-4 opacity-100 group-hover:opacity-0 transition-opacity duration-300">
                     <div className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1 shadow-lg">
                       <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                      <span className="text-sm font-bold text-gray-900">4.8</span>
+                      <span className="text-sm font-bold text-gray-900">
+                        4.8
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -296,9 +342,15 @@ const ShopCategory = (props) => {
                   {product.quantity && (
                     <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
                       <div className="flex items-center gap-2">
-                        <div className={`w-2.5 h-2.5 rounded-full ${product.quantity > 10 ? "bg-green-500 animate-pulse" : "bg-orange-500"}`} />
-                        <span className={`text-xs font-semibold ${product.quantity > 10 ? "text-green-600" : "text-orange-600"}`}>
-                          {product.quantity > 10 ? "In Stock" : `Only ${product.quantity} left!`}
+                        <div
+                          className={`w-2.5 h-2.5 rounded-full ${product.quantity > 10 ? "bg-green-500 animate-pulse" : "bg-orange-500"}`}
+                        />
+                        <span
+                          className={`text-xs font-semibold ${product.quantity > 10 ? "text-green-600" : "text-orange-600"}`}
+                        >
+                          {product.quantity > 10
+                            ? "In Stock"
+                            : `Only ${product.quantity} left!`}
                         </span>
                       </div>
                     </div>
@@ -340,14 +392,26 @@ const ShopCategory = (props) => {
         }
 
         @keyframes blob {
-          0%, 100% { transform: translate(0, 0) scale(1); }
-          33% { transform: translate(30px, -50px) scale(1.1); }
-          66% { transform: translate(-20px, 20px) scale(0.9); }
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
         }
 
         @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-10px); }
+          0%,
+          100% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
         }
 
         .animate-blob {
