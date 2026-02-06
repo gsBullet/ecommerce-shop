@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { ShopContext } from "../../context/ShopContest";
 import { Sparkles, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 const BASE_URL = "http://localhost:9000/";
 
 const RelatedProducts = (props) => {
@@ -33,7 +34,8 @@ const RelatedProducts = (props) => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {related_product?.slice(0, 8).map((item, index) => (
-            <div
+            <Link
+              to={`/product/${item.id}`}
               key={item.id}
               className="group relative bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2"
               style={{ 
@@ -45,7 +47,7 @@ const RelatedProducts = (props) => {
                 <img
                   src={BASE_URL + item.thumbnail}
                   alt={item.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
                 />
                 
                 {/* Gradient Overlay on Hover */}
@@ -83,7 +85,7 @@ const RelatedProducts = (props) => {
 
               {/* Hover Accent Line */}
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-600 to-pink-600 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500" />
-            </div>
+            </Link>
           ))}
         </div>
 

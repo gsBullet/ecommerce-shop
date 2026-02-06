@@ -77,6 +77,17 @@ const ShopContextProvider = ({ children }) => {
     });
   }, []);
 
+  // delete entire cart item (regardless of quantity)
+  const deleteCartItem = useCallback((cartKey) => {
+    setCartItems((prev) => {
+      if (!prev[cartKey]) return prev;
+
+      const updated = { ...prev };
+      delete updated[cartKey];
+      return updated;
+    });
+  }, []);
+
   // ✅ CLEAR CART
   const clearCart = () => setCartItems({});
 
@@ -113,6 +124,7 @@ const ShopContextProvider = ({ children }) => {
         getTotalItems,
         getTotalAmount,
         fetchProducts,
+        deleteCartItem
       }}
     >
       {children}
