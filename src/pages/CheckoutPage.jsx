@@ -53,7 +53,7 @@ const CheckoutPage = () => {
         state: user.addresses[0]?.state || "",
         city: user.addresses[0]?.city || "",
         postalCode: user.addresses[0]?.postalCode || "",
-        deliveryMethod: user.addresses[0]?.deliveryMethod || shippingLocation,
+        deliveryMethod: shippingLocation,
       });
     }
   }, [user, isAuthenticated?.isAuth, shippingLocation]);
@@ -338,25 +338,32 @@ const CheckoutPage = () => {
 
               {/* Order Items */}
               <div className="space-y-4 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700">
-                {Object.values(cartItems).slice(0, 3).map((item) => {
-                  const product = all_product.find((p) => p.id === item.productId);
-                  if (!product) return null;
-                  return (
-                    <div key={item.productId} className="flex items-center gap-3">
-                      <div className="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                        <ShoppingBag className="w-8 h-8 text-gray-400" />
+                {Object.values(cartItems)
+                  .slice(0, 3)
+                  .map((item) => {
+                    const product = all_product.find(
+                      (p) => p.id === item.productId,
+                    );
+                    if (!product) return null;
+                    return (
+                      <div
+                        key={item.productId}
+                        className="flex items-center gap-3"
+                      >
+                        <div className="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                          <ShoppingBag className="w-8 h-8 text-gray-400" />
+                        </div>
+                        <div className="flex-grow">
+                          <p className="font-medium text-gray-900 dark:text-white text-sm">
+                            {product.name}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            Qty: {item.quantity} × ${product.new_price}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex-grow">
-                        <p className="font-medium text-gray-900 dark:text-white text-sm">
-                          {product.name}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          Qty: {item.quantity} × ${product.new_price}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
                 {Object.values(cartItems).length > 3 && (
                   <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
                     +{Object.values(cartItems).length - 3} more items
@@ -368,7 +375,9 @@ const CheckoutPage = () => {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>Subtotal</span>
-                  <span className="font-semibold">${totalAmount.toFixed(2)}</span>
+                  <span className="font-semibold">
+                    ${totalAmount.toFixed(2)}
+                  </span>
                 </div>
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span className="flex items-center gap-2">
