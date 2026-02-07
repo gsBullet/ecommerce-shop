@@ -1,8 +1,10 @@
+import Axios from "./Axios";
 
-
-import Axios from "./Axios"
-
-export const checkPromoCodeForProduct= async()=>{
-    const response = await Axios.get(`/get-promo-code-for-products`);
-    return response.data;
-}
+export const applyPromoCodeForProduct = async (token, promo) => {
+  const response = await Axios.get(`/apply-promo-code-for-products?promo=${promo}`, {
+    headers: {
+      Authorization: `EcomToken ${token}`,
+    },
+  });
+  return response.data;
+};

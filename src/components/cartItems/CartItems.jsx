@@ -1,7 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../../context/ShopContest";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus, ShoppingBag, Tag, X, MapPin } from "lucide-react";
+import { applyPromoCodeForProduct } from "../../service/promoCode";
+import { FrontendAuthContext } from "../../context/FrontendAuthContext";
 
 const BASE_URL = "http://localhost:9000/";
 
@@ -17,7 +19,9 @@ const CartItems = () => {
     deleteCartItem,
   } = useContext(ShopContext);
   const navigate = useNavigate();
-  const [shippingLocation, setShippingLocation] = useState("dhaka"); // "dhaka" or "outside"
+  const { isAuthenticated, user } = useContext(FrontendAuthContext);
+  const [shippingLocation, setShippingLocation] = useState("dhaka");
+  const [appliedPromoCode, setAppliedPromoCode] = useState(null);
 
   const shippingCost = shippingLocation === "dhaka" ? 60 : 120;
 
@@ -36,6 +40,17 @@ const CartItems = () => {
     shippingLocation: shippingLocation,
   });
 
+  const applyPromoCode = async (e) => {
+    e.preventDefault();
+
+    try {
+      await applyPromoCodeForProduct(isAuthenticated?.token, appliedPromoCode);
+      console.log("applyPromoCodeForProduct");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -51,7 +66,7 @@ const CartItems = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {Object.entries(cartItems).length === 0 ? (
@@ -205,21 +220,27 @@ const CartItems = () => {
               </div>
 
               {/* Promo Code */}
-              <div className="space-y-3">
+              <div className="space-y-3 overflow-hidden">
                 <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
                   <Tag className="w-5 h-5" />
                   <p className="font-medium">Have a promo code?</p>
                 </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Enter code"
-                    className="flex-grow px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-colors"
-                  />
-                  <button className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg">
-                    Apply
-                  </button>
-                </div>
+                <form onSubmit={applyPromoCode}>
+                  <div className="flex flex-wrap justify-end  2xl:flex-nowrap gap-2">
+                    <input
+                      type="text"
+                      placeholder="Enter code"
+                      className="flex-grow px-4 py-3 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-blue-500 dark:focus:border-blue-400 focus:outline-none transition-colors w-full"
+                      onChange={(e) => setAppliedPromoCode(e.target.value)}
+                    />
+                    <button
+                      type="submit"
+                      className="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 hover:shadow-lg"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </form>
               </div>
 
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6 space-y-4">
