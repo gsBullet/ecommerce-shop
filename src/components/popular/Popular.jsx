@@ -31,7 +31,7 @@ const Popular = () => {
 
           {/* Main Title */}
           <div className="space-y-3">
-            <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent leading-tight">
+            <h1 className="text-5xl md:text-7xl font-black bg-gradient-to-r from-rose-600 via-pink-600 to-purple-600 bg-clip-text text-transparent leading-tight text-center">
               Popular in Women
             </h1>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">

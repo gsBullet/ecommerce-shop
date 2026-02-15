@@ -52,7 +52,7 @@ const NewCollection = () => {
 
           {/* Main Title */}
           <div className="space-y-4">
-            <h1 className="text-6xl md:text-8xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent leading-tight animate-slide-in">
+            <h1 className="text-6xl md:text-8xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent leading-tight animate-slide-in text-center">
               New Collection
             </h1>
             <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">

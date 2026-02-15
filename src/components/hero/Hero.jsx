@@ -2,6 +2,7 @@ import "./hero.css";
 import React from 'react';
 import handIcon from "../assets/Frontend_Assets/hand_icon.png";
 import arrowIcon from "../assets/Frontend_Assets/arrow.png";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -17,15 +18,15 @@ const Hero = () => {
           <div className="space-y-8 z-10">
             {/* Category Pills */}
             <div className="flex flex-wrap gap-3 animate-fade-in">
-              <span className="px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-semibold text-purple-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              <Link to="/women" className="px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-semibold text-purple-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 Women
-              </span>
-              <span className="px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-semibold text-pink-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              </Link>
+              <Link to="/men" className="px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-semibold text-pink-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 Men
-              </span>
-              <span className="px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-semibold text-blue-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
+              </Link>
+              <Link to="/kids" className="px-5 py-2 bg-white/80 backdrop-blur-sm rounded-full text-sm font-semibold text-blue-600 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
                 Kids
-              </span>
+              </Link>
             </div>
 
             {/* Badge */}
@@ -41,7 +42,7 @@ const Hero = () => {
                 <h1 className="text-6xl lg:text-8xl font-black bg-gradient-to-r from-gray-900 via-purple-900 to-pink-900 bg-clip-text text-transparent leading-tight">
                   New
                 </h1>
-                <div className="animate-bounce">
+                <div className="animate-pulse transform hover:scale-110 transition-transform duration-300 hidden">
                   <img 
                     src={handIcon} 
                     alt="Hand Icon" 

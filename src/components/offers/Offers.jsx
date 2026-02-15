@@ -30,7 +30,7 @@ const Offers = () => {
       <div className="relative max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div className="space-y-8 z-10">
+          <div className="space-y-8 z-10 ">
             {/* Premium Badge */}
             <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full shadow-2xl animate-bounce-subtle">
               <Tag className="w-5 h-5 text-white" />
@@ -124,7 +124,7 @@ const Offers = () => {
           </div>
 
           {/* Right Image */}
-          <div className="relative z-10 lg:scale-110">
+          <div className="relative z-10  lg:scale-110">
             <div className="relative group">
               {/* Glowing Background */}
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500 via-purple-500 to-blue-500 rounded-full blur-3xl opacity-40 group-hover:opacity-60 transition-opacity duration-500 animate-pulse-slow"></div>

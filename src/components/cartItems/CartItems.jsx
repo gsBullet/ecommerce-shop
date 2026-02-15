@@ -22,6 +22,8 @@ const CartItems = () => {
   const { isAuthenticated, user } = useContext(FrontendAuthContext);
   const [shippingLocation, setShippingLocation] = useState("dhaka");
   const [appliedPromoCode, setAppliedPromoCode] = useState(null);
+  console.log(cartItems);
+  
 
   const shippingCost = shippingLocation === "dhaka" ? 60 : 120;
 
@@ -44,7 +46,7 @@ const CartItems = () => {
     e.preventDefault();
 
     try {
-      await applyPromoCodeForProduct(isAuthenticated?.token, appliedPromoCode);
+      await applyPromoCodeForProduct(isAuthenticated?.token, appliedPromoCode,user?._id,cartItems);
       console.log("applyPromoCodeForProduct");
     } catch (error) {
       console.log(error);
